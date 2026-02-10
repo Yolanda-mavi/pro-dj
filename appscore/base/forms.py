@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.forms.widgets import Textarea,TextInput
 from django.views.generic import CreateView
 from appscore.base.models import Product
-
+#cambio pruebas11
 #tambien existe un video 27 donde agrega propiedades por medio de una libreria tipo wigget que se instala (tweaks)
 class ProductForm(ModelForm):
     def __init__(self,*args,**kwargs):
