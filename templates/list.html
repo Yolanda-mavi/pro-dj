@@ -1,0 +1,113 @@
+{% extends  'home.html' %}
+{% load static %}
+{% block head %}
+
+
+    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
+
+    <!-- jQuery -->
+{#<script src="https://code.jquery.com/jquery-3.7.0.js"></script>#}
+{#<!-- DataTables JS -->#}
+{#<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#<!-- DataTables Bootstrap 5 JS -->#}
+{#<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+
+
+{% endblock %}
+{% block content %}
+{#    <p>Hola vista de productos </p>#}
+{#    <p>{{ title }} </p>#}
+{#<ul>#}
+{#{% for produ in products %}#}
+{#<li>{{ produ.name }}</li>#}
+{#{% endfor %}#}
+{#</ul>#}
+
+<div class="card" >
+<div class="card-header">
+    <h3 class="card-title" >
+        <i  ></i>
+        {{ title }}
+    </h3>
+</div>
+    <div class="card-body" >
+
+    <table class="table" id="datatableid" >
+      <thead>
+      {% block columns %}
+
+      {% endblock %}
+{#        <tr>#}
+{#          <th scope="col">#</th>#}
+{#          <th scope="col">Nombre</th>#}
+{#            <th scope="col" > Operaciones</th>#}
+{#        </tr>#}
+      </thead>
+      <tbody>
+      {% block rows %}
+
+      {% endblock %}
+{#      {% for produ in products %}#}
+{#          <tr>#}
+{#            <td> {{ produ.id }} </td>#}
+{#            <td> {{ produ.name }} </td>#}
+{#            <td>#}
+{#            <button type="button" class="btn btn-info "> <i class="fa-regular fa-pen-to-square"></i> E </button>#}
+{##}
+{#            <button type="button" class="btn btn-danger "> <i class="fa-regular fa-trash-can"></i> D </button>#}
+{#            </td>#}
+{#          </tr>#}
+{#      {% endfor %}#}
+
+
+      </tbody>
+    </table>
+ </div>
+    <div class="card-footer">
+    <button type="button" class="btn btn-primary" id="btnNew" >  <i class="fa-regular fa-trash-can"></i>  Nuevo </button>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+	<script type="application/javascript">
+    {#despues de debe agregar resposive para cambiar tamano y otras porpiedades autowith y resposive#}
+new DataTable('#datatableid',{
+    responsive:true,
+    autoWidth:true
+
+});
+
+document.getElementById('btnNew')
+  .addEventListener('click', function () {
+    {#alert('Click funcionando 🎉');#}
+      $.ajax({
+    url: '{% url 'baseu:product_list' %}',
+    type: 'POST',
+    data: { id: 1},
+          dataType:'json',
+    success: function(respuesta) {
+        console.log(respuesta);
+    },
+    error: function(error) {
+        console.error(error);
+    }
+}).done(function(data, textStatus, jqXHR) {
+    // Código a ejecutar si la petición fue exitosa
+    console.log("Éxito:", data);
+}).fail(function(jqXHR, textStatus, errorThrown) {
+    // Código a ejecutar si la petición falla
+    console.error("Error:", textStatus);
+}).always(function() {
+    // Código que se ejecuta siempre, al finalizar
+    console.log("Petición completada");
+})
+      ;
+
+
+  });
+
+{#      $(document).ready(function() {#}
+{#        $('#datatableid').DataTable();#}
+{#    });#}
+    </script>
+{% endblock %}

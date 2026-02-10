@@ -1,0 +1,42 @@
+{% extends  'home.html' %}
+
+{% block content %}
+
+
+    <form method="post" action=".">
+
+   <div class="card" >
+<div class="card-header">
+    <h3 class="card-title" >
+        <i ></i>
+        {{ title }}
+    </h3>
+</div>
+    <div class="card-body" >
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+            <div class="form-group">
+            <label for="name">{{ field.label }}</label>
+            {{ field }}
+            </div>
+        {% endfor %}
+{#        {{ form }}   otra opcion como viene el form#}
+
+{#            {{ form.as_ul }}  tambien sale como tabla etc   con form.name.label obtengo el  valor#}
+{#        <div class="form-group">#}
+{#<label for="name">Nombre</label>#}
+{#            {{ form.name }}#}
+{#    </div>#}
+
+ </div>
+    <div class="card-footer">
+    <button type="submit" class="btn btn-success" id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    </div>
+</div>
+
+    </form>
+
+
+
+
+{% endblock %}

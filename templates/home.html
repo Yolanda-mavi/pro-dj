@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'lib/bts/css/bootstrap.min.css' %}"  />
+    <script defer src="{% static 'lib/bts/js/bootstrap.bundle.js' %}"></script>
+<link href="{% static 'lib/DataTables/datatables.min.css' %}" rel="stylesheet">
+{#<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+    <title> {{ title }}</title>
+    <!-- Bloque head para exteciones como datatable -->
+    {% block head %}
+
+    {% endblock %}
+
+
+</head>
+<body>
+{#<p> {{ name }}</p>#}
+{% include 'header.html' %}
+
+<div class="container-fluid font-weight-bold" >
+    <p>El texto de home</p>
+</div>
+
+{% block content %}
+<p> el content de home </p>
+{% endblock %}
+
+{#<button  class="btn btn-danger" >Un boton</button>#}
+{#{% block content %}#}
+{#<ul>#}
+{#{% for category in categories %}#}
+{#<li>{{ category.name }}</li>#}
+{#{% endfor %}#}
+{#</ul>#}
+{##}
+{#{% endblock %}#}
+
+<!--Es el javascrp para datatable -->
+{% block javascript %}
+	
+{% endblock %}
+
+</body>
+</html>
