@@ -15,7 +15,7 @@ class Category(models.Model):
 
 class Product(models.Model):
 
-    name = models.CharField(max_length=100,verbose_name="Nombre de producto")
+    name = models.CharField(max_length=100,verbose_name="Nombre de producto",unique=True)
     category_id = models.ForeignKey(Category, on_delete=models.PROTECT,null=True,blank=True, verbose_name="Categoria")
     description = models.TextField( null=True,blank=True, verbose_name="Descripcion")
 

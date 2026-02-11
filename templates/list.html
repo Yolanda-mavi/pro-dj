@@ -64,14 +64,14 @@
     </table>
  </div>
     <div class="card-footer">
-    <button type="button" class="btn btn-primary" id="btnNew" >  <i class="fa-regular fa-trash-can"></i>  Nuevo </button>
+    <a href="{{ create_url }}" class="btn btn-primary " id="btnNew" >  <i class="fa-regular fa-trash-can "></i>Nuevo registro</a>
     </div>
 </div>
 {% endblock %}
 {% block javascript %}
 	<script type="application/javascript">
     {#despues de debe agregar resposive para cambiar tamano y otras porpiedades autowith y resposive#}
-new DataTable('#datatableid',{
+ const table =  new DataTable('#datatableid',{
     responsive:true,
     autoWidth:true
 
@@ -81,30 +81,27 @@ document.getElementById('btnNew')
   .addEventListener('click', function () {
     {#alert('Click funcionando 🎉');#}
       $.ajax({
-    url: '{% url 'baseu:product_list' %}',
-    type: 'POST',
-    data: { id: 1},
-          dataType:'json',
-    success: function(respuesta) {
-        console.log(respuesta);
-    },
-    error: function(error) {
-        console.error(error);
-    }
-}).done(function(data, textStatus, jqXHR) {
-    // Código a ejecutar si la petición fue exitosa
-    console.log("Éxito:", data);
-}).fail(function(jqXHR, textStatus, errorThrown) {
-    // Código a ejecutar si la petición falla
-    console.error("Error:", textStatus);
-}).always(function() {
-    // Código que se ejecuta siempre, al finalizar
-    console.log("Petición completada");
-})
-      ;
-
-
-  });
+        url: '{% url 'baseu:product_list' %}',
+        type: 'POST',
+        data: { id: 1},
+              dataType:'json',
+        success: function(respuesta) {
+            console.log(respuesta);
+        },
+        error: function(error) {
+            console.error(error);
+        }
+        }).done(function(data, textStatus, jqXHR) {
+            // Código a ejecutar si la petición fue exitosa
+            console.log("Éxito:", data);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            // Código a ejecutar si la petición falla
+            console.error("Error:", textStatus);
+        }).always(function() {
+            // Código que se ejecuta siempre, al finalizar
+            console.log("Petición completada");
+        });
+        });
 
 {#      $(document).ready(function() {#}
 {#        $('#datatableid').DataTable();#}

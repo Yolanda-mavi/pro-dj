@@ -1,4 +1,6 @@
-#from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect
+# import http
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -66,7 +68,7 @@ class ProductListView(ListView):
         #context['name'] = "Hola" #para el pasado forma de no clase
         #context['products'] = Product.objects.all() #para el pasado forma de no clases
         context['title'] = "Listado de produtos"
-
+        context['create_url'] = reverse_lazy('baseu:product_create')
         return context
 
 class ProductCreateView(CreateView):
@@ -75,8 +77,21 @@ class ProductCreateView(CreateView):
     template_name = 'product/product_create.html'
     success_url =  reverse_lazy('baseu:product_list')
 
+    def post(self, request, *args, **kwargs):
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(self.success_url)
+        self.object = None
+        context = self.get_context_data(**kwargs) #para que envie el titulo
+        context['form'] = form
+        return render(request, self.template_name, context)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de produtos"
+        context['title'] = "Creacion de productos"
 
         return context
+
+
+
