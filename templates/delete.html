@@ -1,0 +1,64 @@
+{% extends  'home.html' %}
+{% block content %}
+
+    <form method="post" action="." id="formGeneric">
+    <div class="card" >
+        <div class="card-header">
+        <h3 class="card-title" >
+            <i ></i>
+            {{ title }}
+        </h3>
+        </div>
+        <div class="card-body" >
+            {% csrf_token %}
+             <div>
+                <h5>Notificacion</h5>
+                Estas seguro de eliminar el registro nro {{ object.id }}
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+        <button type="submit" class="btn btn-success" id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Si, aceptar </button>
+            <a href="{{ list_url }}"  >
+                <i ></i> Cancelar
+            </a>
+        </div>
+    </div>
+    </form>
+
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formGeneric');
+    form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    //  Convierte todo el form en objeto JSON automáticamente
+    const dataToSend = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch( window.location.pathname, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(dataToSend)
+        });
+           const data = await response.json();
+           if (data.success) {
+                window.location.href = "{% url 'baseu:product_list' %}";
+           } else {
+                console.log("Errores:", data.error);
+                message_error(data.error);
+           }
+    } catch (error) {
+        console.log("un error de cach")
+    }
+});
+
+});
+</script>
+{% endblock %}

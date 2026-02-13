@@ -69,8 +69,46 @@
 </div>
 {% endblock %}
 {% block javascript %}
-	<script type="application/javascript">
-    {#despues de debe agregar resposive para cambiar tamano y otras porpiedades autowith y resposive#}
+    <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const table = new DataTable('#datatableid', {
+            responsive: true,
+            autoWidth: true
+        });
+
+        const btnNew = document.getElementById('btnNew');
+
+        btnNew.addEventListener('click', async function () {
+
+            {#const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; usar cuando arregle lo de los tokcens#}
+
+            try {
+                const response = await fetch("{% url 'baseu:product_list' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                        {#usar cuando arregle lo de los tockens ahorita s tengo decorador#}
+                    },
+                    body: JSON.stringify({ id: 1 })
+                });
+
+                const data = await response.json();
+                console.log("Éxito:", data);
+
+            } catch (error) {
+                console.error("Error:", error);
+            } finally {
+                console.log("Petición completada");
+            }
+
+        });
+
+    });
+
+    /*    {#despues de debe agregar resposive para cambiar tamano y otras porpiedades autowith y resposive#}
  const table =  new DataTable('#datatableid',{
     responsive:true,
     autoWidth:true
@@ -79,7 +117,7 @@
 
 document.getElementById('btnNew')
   .addEventListener('click', function () {
-    {#alert('Click funcionando 🎉');#}
+    alert('Click funcionando 🎉');
       $.ajax({
         url: '{% url 'baseu:product_list' %}',
         type: 'POST',
@@ -103,8 +141,8 @@ document.getElementById('btnNew')
         });
         });
 
-{#      $(document).ready(function() {#}
-{#        $('#datatableid').DataTable();#}
-{#    });#}
+      $(document).ready(function() {
+        $('#datatableid').DataTable();
+    });*/
     </script>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 
 
-    <form method="post" action=".">
+    <form method="post" action="." id="formGeneric">
 
    <div class="card" >
 <div class="card-header">
@@ -14,19 +14,20 @@
 </div>
     <div class="card-body" >
         {% csrf_token %}
-        {%  if form.errors %}
-            <div class="alert alert-danger alert-dismissible" >
-            <button type="button" class="close"   aria-hidden="true" ></button>
-            <h5> <i ></i> Alert</h5>
-            <ul>
-                {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-                {% endfor %}
-            </ul>
-            </div>
-        {% endif %}
+        <input type="hidden" name="action" value="{{ action }}">
+{#        {%  if form.errors %}#}
+{#            <div class="alert alert-danger alert-dismissible" >#}
+{#            <button type="button" class="close"   aria-hidden="true" ></button>#}
+{#            <h5> <i ></i> Alert</h5>#}
+{#            <ul>#}
+{#                {% for field in form %}#}
+{#                {% for error in field.errors %}#}
+{#                    <li>{{ error }}</li>#}
+{#                {% endfor %}#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#            </div>#}
+{#        {% endif %}#}
 {#        {{ form.errors }}#}
         {% for field in form.visible_fields %}
             <div class="form-group">
@@ -53,8 +54,62 @@
 
 <script>
 
+document.addEventListener('DOMContentLoaded', () => {
 
 
+    const form = document.getElementById('formGeneric');
+
+    form.addEventListener('submit', async function (event) {
+    {#console.log("alerta despues submit");#}
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    //  Convierte todo el form en objeto JSON automáticamente
+    const dataToSend = Object.fromEntries(formData.entries());
+
+{#dataToSend['action'] = 'edit';#}
+{#console.log("alerta antes try");#}
+
+    try {
+        {#alert("empieza ");#}
+        //const response = await fetch(form.action, {
+        //const response = await fetch( "{% url 'baseu:product_create' %}" , {
+        const response = await fetch( window.location.pathname, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+
+            body: JSON.stringify(dataToSend)
+        });
+
+           const data = await response.json();
+
+           if (data.success) {
+                window.location.href = "{% url 'baseu:product_list' %}";
+           } else {
+                console.log("Errores:", data.error);
+                message_error(data.error);
+           }
+
+
+        {# console.log("alerta termino");#}
+        {#console.log("Response status:", response.status);#}
+        {#const data = await response.json();#}
+        {#console.log("Éxito:", data);#}
+        {##}
+        {#form.reset();#}
+
+    } catch (error) {
+        console.log("un error de cach")
+        //console.error("Error:", error);
+    }
+
+});
+
+});
 </script>
 
 {% endblock %}

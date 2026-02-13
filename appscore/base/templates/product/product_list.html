@@ -23,9 +23,11 @@
             <td> {{ produ.id }} </td>
             <td> {{ produ.name }} </td>
             <td>
-            <button type="button" class="btn btn-info "> <i class="fa-regular fa-pen-to-square"></i> E </button>
+{#            <button type="button" class="btn btn-info  "  href="{% url 'baseu:product_update' produ.id %}" > <i class="fa-regular fa-pen-to-square"></i> E </button>#}
 
-            <button type="button" class="btn btn-danger "> <i class="fa-regular fa-trash-can"></i> D </button>
+                <a href="{% url 'baseu:product_update' produ.id %}" class="btn btn-primary"  > Editar </a>
+                <a href="{% url 'baseu:product_delete' produ.id %}" class="btn btn-danger"  > Eliminar </a>
+
             </td>
           </tr>
       {% endfor %}
