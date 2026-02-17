@@ -1,5 +1,5 @@
 {%  load static %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Link</a>
@@ -18,15 +18,19 @@
           Catalogos
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="index.html">Productos</a>
-          <a class="dropdown-item" href="index.html">Categorias</a>
+          <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
+          <a class="dropdown-item" href="indexm.html">Categorias</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="index.html">Something else here</a>
+          <a class="dropdown-item" href="indexm.html">Something else here</a>
         </div>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>
+      </li>
+      <a class="nav-link" href="#">{{ request.user.username}}</a>
     </ul>
 
   </div>

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView,DeleteView
+from django.views.generic import ListView, CreateView, UpdateView,DeleteView,FormView
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 
@@ -32,41 +32,49 @@ class ProductListView(ListView):
     # @method_decorator(login_required)
     #despues tambinen se debe agregar el tocken
     @method_decorator(csrf_exempt)#se usa para que no tenga seguridad de login este lugar
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
          return super(ProductListView, self).dispatch(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        data = {}
+        print("post search--")
+        try:
+            body = json.loads(request.body)
+            action = body.get('action')
+            print(action)
+            print("action--")
+            if action == 'searchdata':
+                data =[]
+                print("hola search data")
+                for i in Product.objects.all():
+                    data.append(i.tojson())
+                #data = list(Product.objects.values('id', 'name'))
+            else:
+                data['error'] = {'name': ["Ha ocurrido un error"]}
+        except Exception as e:
+            print(str(e))
+            print("el erro try")
+            data['error'] =  {'name': [str(e)]}
+        return JsonResponse(data, safe=False)
+
+
     # def post(self, request, *args, **kwargs):
+    #     # data = {'name': 'Hola5',}
     #     data = {}
     #     try:
-    #         body = json.loads(request.body)
-    #         action = body.get('action')
-    #         if action == 'searchdata':
-    #             data =[]
-    #             for i in Product.objects.all():
-    #                 data.append(i.tojson())
-    #         else:
-    #             data['error'] = {'name': ["Ha ocurrido un error"]}
+    #         # pord =Product.objects.get(pk=request.POST['id']) nomalr llamada
+    #
+    #         #pord =Product.objects.get(pk=25)
+    #
+    #        # data['name'] = pord.name #para corrida normal por campo
+    #         data = Product.objects.get(pk=request.POST['id']).tojson() #devuelve el diccionado creado en modesl
     #     except Exception as e:
-    #         data['error'] =  {'name': [str(e)]}
-    #     return JsonResponse(data, safe=False)
-
-
-    def post(self, request, *args, **kwargs):
-        # data = {'name': 'Hola5',}
-        data = {}
-        try:
-            # pord =Product.objects.get(pk=request.POST['id']) nomalr llamada
-
-            #pord =Product.objects.get(pk=25)
-
-           # data['name'] = pord.name #para corrida normal por campo
-            data = Product.objects.get(pk=request.POST['id']).tojson() #devuelve el diccionado creado en modesl
-        except Exception as e:
-            data['error'] = str(e)
-            return JsonResponse(data)
-
-
-        return JsonResponse(data)
+    #         data['error'] = str(e)
+    #         return JsonResponse(data)
+    #
+    #
+    #     return JsonResponse(data)
 
 
     # def dispatch(self, request, *args, **kwargs):
@@ -146,6 +154,10 @@ class ProductCreateView(CreateView):
 
         return context
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductCreateView, self).dispatch(request, *args, **kwargs)
+
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
@@ -183,6 +195,10 @@ class ProductUpdateView(UpdateView):
         print("hola update")
         return context
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductUpdateView, self).dispatch(request, *args, **kwargs)
+
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = "product/product_delete.html"
@@ -206,3 +222,37 @@ class ProductDeleteView(DeleteView):
         context['list_url'] = reverse_lazy('baseu:product_list')
 
         return context
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductDeleteView, self).dispatch(request, *args, **kwargs)
+
+#video 36 quedo mas o menos y comentar el ajax del form
+# class ProductFromView(FormView):
+#     form_class = ProductForm
+#     template_name = 'product/product_create.html'
+#     success_url =  reverse_lazy('baseu:product_list')
+#
+#     # def __init__(self):
+#     #     super().__init__()
+#     #     self.fields['name'].widget.attrs['autofocus'] = True
+#
+#     def form_valid(self, form):
+#         print(form.is_valid())
+#         print(form)
+#         return super().form_valid(form)
+#
+#
+#     def form_invalid(self, form):
+#         print(form.is_valid())
+#         print(form.errors)
+#         return super().form_invalid(form)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = "Form de productos"
+#         context['list_url'] = reverse_lazy('baseu:product_list')
+#         context['action'] = 'add'
+#
+#         return context
+

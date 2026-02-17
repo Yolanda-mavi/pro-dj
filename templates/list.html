@@ -11,9 +11,12 @@
 {#<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
 {#<!-- DataTables Bootstrap 5 JS -->#}
 {#<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
-
+{% block head_list %}
 
 {% endblock %}
+
+{% endblock %}
+
 {% block content %}
 {#    <p>Hola vista de productos </p>#}
 {#    <p>{{ title }} </p>#}
@@ -31,8 +34,9 @@
     </h3>
 </div>
     <div class="card-body" >
-
+ {% csrf_token %}
     <table class="table" id="datatableid" >
+
       <thead>
       {% block columns %}
 
@@ -64,7 +68,7 @@
     </table>
  </div>
     <div class="card-footer">
-    <a href="{{ create_url }}" class="btn btn-primary " id="btnNew" >  <i class="fa-regular fa-trash-can "></i>Nuevo registro</a>
+    <a href="{{ create_url }}" class="btn btn-secondary" id="btnNew" >  <i class="fa-regular fa-trash-can "></i>Nuevo registro</a>
     </div>
 </div>
 {% endblock %}
@@ -73,10 +77,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        const table = new DataTable('#datatableid', {
+      /*  const table = new DataTable('#datatableid', {
             responsive: true,
             autoWidth: true
-        });
+        });*/
 
         const btnNew = document.getElementById('btnNew');
 

@@ -37,3 +37,13 @@ class ProductForm(ModelForm):
         }
         )
         }
+
+    #se me paso agregar el save
+
+    def clean(self):
+        cleaned = super().clean()
+        if len(cleaned['name']) <5:
+            #raise  form.ValidationError("ingresar nombre")
+            self.add_error('name',"no es muy long")
+        print(cleaned)
+        return cleaned

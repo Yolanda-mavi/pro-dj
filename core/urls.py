@@ -18,6 +18,9 @@ from xml.etree.ElementInclude import include
 
 from django.contrib import admin
 from django.urls import path,include
+from appscore.homepage.views import IndexView
+from appscore.login.views import *
+
 
 
 #from appscore.base.views.product.views import product_list
@@ -29,5 +32,6 @@ urlpatterns = [
     #path('prueba/',myfirstview)
     #path('product/', product_list,name='product_list'),
     path('base/',include('appscore.base.urls')),
-
+    path('',IndexView.as_view(),name='index'),
+    path('login/', include('appscore.login.urls')),
 ]

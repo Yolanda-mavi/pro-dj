@@ -1,5 +1,8 @@
 {% extends  'list.html' %}
-
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'product/product_list.js'  %}"></script>
+{% endblock %}
 {#{% block content %}#}
 {#    <p>Hola vista de productos </p>#}
 {#    <p>{{ title }} </p>#}
@@ -18,21 +21,24 @@
 
 {% block rows %}
 {#  {% for produ in products %}   no clasess#}
-  {% for produ in object_list %}
-          <tr>
-            <td> {{ produ.id }} </td>
-            <td> {{ produ.name }} </td>
-            <td>
+{#  {% for produ in object_list %}#}
+{#          <tr>#}
+{#            <td> {{ produ.id }} </td>#}
+{#            <td> {{ produ.name }} </td>#}
+{#            <td>#}
 {#            <button type="button" class="btn btn-info  "  href="{% url 'baseu:product_update' produ.id %}" > <i class="fa-regular fa-pen-to-square"></i> E </button>#}
-
-                <a href="{% url 'baseu:product_update' produ.id %}" class="btn btn-primary"  > Editar </a>
-                <a href="{% url 'baseu:product_delete' produ.id %}" class="btn btn-danger"  > Eliminar </a>
-
-            </td>
-          </tr>
-      {% endfor %}
+{##}
+{#                <a href="{% url 'baseu:product_update' produ.id %}" class="btn btn-primary"  > Editar 3</a>#}
+{#                <a href="{% url 'baseu:product_delete' produ.id %}" class="btn btn-danger"  > Eliminar </a>#}
+{##}
+{#            </td>#}
+{#          </tr>#}
+{#      {% endfor %}#}
 {% endblock %}
 
+{% block javascript %}
+
+{% endblock %}
 
 {##}
 {#<div class="card" >#}
