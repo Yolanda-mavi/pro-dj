@@ -21,7 +21,9 @@ from django.urls import path,include
 from appscore.homepage.views import IndexView
 from appscore.login.views import *
 
-
+#para trabajar con imagenes
+#from django.conf import settings
+#from django.conf.urls.static import static
 
 #from appscore.base.views.product.views import product_list
 
@@ -35,3 +37,5 @@ urlpatterns = [
     path('',IndexView.as_view(),name='index'),
     path('login/', include('appscore.login.urls')),
 ]
+#para trabajar con imagenes
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

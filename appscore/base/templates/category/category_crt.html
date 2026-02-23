@@ -1,0 +1,37 @@
+{% extends  'form.html' %}
+
+
+
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formGeneric');
+    form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const dataToSend = Object.fromEntries(formData.entries());
+    try {
+        const response = await fetch( window.location.pathname, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',// solo modelos sin imagen
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(dataToSend)
+        });
+           const data = await response.json();
+           if (data.success) {
+                window.location.href = "{% url 'baseu:category_list' %}";
+           } else {
+                console.log("Errores:", data.error);
+                message_error(data.error);
+           }
+    } catch (error) {
+        console.log("un error de cach")
+        //console.error("Error:", error);
+    }
+});
+});
+</script>
+{% endblock %}

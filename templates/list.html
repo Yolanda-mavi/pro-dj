@@ -2,15 +2,8 @@
 {% load static %}
 {% block head %}
 
+<script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
 
-    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
-
-    <!-- jQuery -->
-{#<script src="https://code.jquery.com/jquery-3.7.0.js"></script>#}
-{#<!-- DataTables JS -->#}
-{#<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
-{#<!-- DataTables Bootstrap 5 JS -->#}
-{#<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
 {% block head_list %}
 
 {% endblock %}
@@ -18,135 +11,56 @@
 {% endblock %}
 
 {% block content %}
-{#    <p>Hola vista de productos </p>#}
-{#    <p>{{ title }} </p>#}
-{#<ul>#}
-{#{% for produ in products %}#}
-{#<li>{{ produ.name }}</li>#}
-{#{% endfor %}#}
-{#</ul>#}
-
 <div class="card" >
 <div class="card-header">
-    <h3 class="card-title" >
-        <i  ></i>
+    <h5 class="card-title" >
         {{ title }}
-    </h3>
+    </h5>
 </div>
     <div class="card-body" >
  {% csrf_token %}
     <table class="table" id="datatableid" >
-
       <thead>
       {% block columns %}
 
       {% endblock %}
-{#        <tr>#}
-{#          <th scope="col">#</th>#}
-{#          <th scope="col">Nombre</th>#}
-{#            <th scope="col" > Operaciones</th>#}
-{#        </tr>#}
+
       </thead>
       <tbody>
       {% block rows %}
 
       {% endblock %}
-{#      {% for produ in products %}#}
-{#          <tr>#}
-{#            <td> {{ produ.id }} </td>#}
-{#            <td> {{ produ.name }} </td>#}
-{#            <td>#}
-{#            <button type="button" class="btn btn-info "> <i class="fa-regular fa-pen-to-square"></i> E </button>#}
-{##}
-{#            <button type="button" class="btn btn-danger "> <i class="fa-regular fa-trash-can"></i> D </button>#}
-{#            </td>#}
-{#          </tr>#}
-{#      {% endfor %}#}
-
 
       </tbody>
     </table>
  </div>
     <div class="card-footer">
-    <a href="{{ create_url }}" class="btn btn-secondary" id="btnNew" >  <i class="fa-regular fa-trash-can "></i>Nuevo registro</a>
+    <a href="{{ create_url }}" class="btn btn-secondary btn-sm" id="btnNew" >  <i class="fa-regular fa-trash-can "></i>Nuevo registro</a>
     </div>
 </div>
 {% endblock %}
 {% block javascript %}
     <script>
-
     document.addEventListener('DOMContentLoaded', () => {
-
-      /*  const table = new DataTable('#datatableid', {
-            responsive: true,
-            autoWidth: true
-        });*/
-
         const btnNew = document.getElementById('btnNew');
-
         btnNew.addEventListener('click', async function () {
-
-            {#const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; usar cuando arregle lo de los tokcens#}
-
-            try {
-                const response = await fetch("{% url 'baseu:product_list' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                        {#usar cuando arregle lo de los tockens ahorita s tengo decorador#}
-                    },
-                    body: JSON.stringify({ id: 1 })
+        try {
+            const response = await fetch(window.location.pathname, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ id: 1 })
                 });
-
                 const data = await response.json();
                 console.log("Éxito:", data);
-
             } catch (error) {
                 console.error("Error:", error);
             } finally {
                 console.log("Petición completada");
             }
-
         });
-
     });
-
-    /*    {#despues de debe agregar resposive para cambiar tamano y otras porpiedades autowith y resposive#}
- const table =  new DataTable('#datatableid',{
-    responsive:true,
-    autoWidth:true
-
-});
-
-document.getElementById('btnNew')
-  .addEventListener('click', function () {
-    alert('Click funcionando 🎉');
-      $.ajax({
-        url: '{% url 'baseu:product_list' %}',
-        type: 'POST',
-        data: { id: 1},
-              dataType:'json',
-        success: function(respuesta) {
-            console.log(respuesta);
-        },
-        error: function(error) {
-            console.error(error);
-        }
-        }).done(function(data, textStatus, jqXHR) {
-            // Código a ejecutar si la petición fue exitosa
-            console.log("Éxito:", data);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            // Código a ejecutar si la petición falla
-            console.error("Error:", textStatus);
-        }).always(function() {
-            // Código que se ejecuta siempre, al finalizar
-            console.log("Petición completada");
-        });
-        });
-
-      $(document).ready(function() {
-        $('#datatableid').DataTable();
-    });*/
     </script>
 {% endblock %}

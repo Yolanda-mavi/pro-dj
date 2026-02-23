@@ -32,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
             className: 'text-center',
             orderable: false,
             render: function (data, type, row) {
-                var buttons =' <a href="/base/product/edit/' + row.id + '/" class="btn btn-secondary"  >  Editar </a> ';
-                buttons +=' <a href="/base/product/delete/' + row.id + '/" class="btn btn-secondary"  > Elim </a>';
+                var buttons =' <a href="/base/product/edit/' + row.id + '/" class="btn btn-secondary btn-sm"  >  Editar </a> ';
+                buttons +=' <a href="/base/product/delete/' + row.id + '/" class="btn btn-secondary btn-sm"  > Elim </a>';
                 return buttons;
             }
-
         }],
 
         // complete: function (settings,json){

@@ -1,0 +1,101 @@
+{% extends  'form.html' %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
+    <script src="{% static 'modeljs/bom_lst.js'  %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="." id="formGeneric">
+<div class="card" >
+    <div class="card-header">
+    <h5 class="card-title" >
+        {{ title }}
+    </h5>
+    </div>
+    <div class="card-body" >
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{ action }}">
+        {% for field in form.visible_fields %}
+            <div class="form-group">
+            <label for="name">{{ field.label }}</label>
+            {{ field }}
+            </div>
+        {% endfor %}
+    <hr>
+    <samp>Detalle</samp>
+    <hr>
+    <div class="d-flex justify-content-between">
+            <h6>Detalle</h6>
+            <button type="button" class="btn btn-primary btn-sm" id="btnAddLine">
+                Agregar línea
+            </button>
+        </div>
+     <table class="table" id="datatableid" >
+      <thead>
+      {% block columns %}
+           <tr>
+          <th scope="col" style="width: 10%;" > #</th>
+          <th scope="col">Nombre</th>
+          <th>Cantidad</th>
+          <th scope="col"  style="width: 20%;"  >Acciones</th>
+          </tr>
+
+      {% endblock %}
+
+      </thead>
+      <tbody>
+      {% block rows %}
+
+      {% endblock %}
+
+      </tbody>
+    </table>
+    </div>
+    <div class="card-footer">
+    <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    </div>
+</div>
+</form>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
+
+{#{% block javascript %}#}
+{##}
+{#<script>#}
+{#/*#}
+{#document.addEventListener('DOMContentLoaded', () => {#}
+{#    const form = document.getElementById('formGeneric');#}
+{#    form.addEventListener('submit', async function (event) {#}
+{#    event.preventDefault();#}
+{#    const formData = new FormData(form);#}
+{#    const dataToSend = Object.fromEntries(formData.entries());#}
+{#    try {#}
+{#        const response = await fetch( window.location.pathname, {#}
+{#            method: 'POST',#}
+{#            headers: {#}
+{#                'Content-Type': 'application/json',// solo modelos sin imagen#}
+{#                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value#}
+{#            },#}
+{#            body: JSON.stringify(dataToSend)#}
+{#        });#}
+{#           const data = await response.json();#}
+{#           console.log("linea 67");#}
+{#           if (data.success) {#}
+{#               console.log("linea 68");#}
+{#                window.location.href = "{% url 'baseu:dashboard' %}";#}
+{#           } else {#}
+{#                console.log("Errores:", data.error);#}
+{#                message_error(data.error);#}
+{#           }#}
+{#    } catch (error) {#}
+{#        console.log("un error de cach")#}
+{#        //console.error("Error:", error);#}
+{#    } #}
+{# }); #}
+{# });*/ #}
+{# </script>#}
+{# {% endblock %}#}

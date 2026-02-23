@@ -1,0 +1,36 @@
+{% extends  'form.html' %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="." id="formGeneric">
+    <div class="card" >
+        <div class="card-header">
+        <h3 class="card-title" >
+            {{ title }}
+        </h3>
+        </div>
+        <div class="card-body" >
+            {% csrf_token %}
+            <input type="hidden" name="action" value="{{ action }}">
+            {% for field in form.visible_fields %}
+                <div class="form-group">
+                <label for="name">{{ field.label }}</label>
+                {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="card-footer">
+        <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+        </div>
+    </div>
+    </form>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}
+
+

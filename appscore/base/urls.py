@@ -15,12 +15,18 @@ urlpatterns = [
     #path('dos/',mysecondview)
  #   path('product/list/', product_list,name='product_list'),
     path('product/list/', ProductListView.as_view() ,name='product_list'),
-    # path('product/list2/', product_list ,name='product_list2'),
+    # path('porduct/list2/', product_list ,name='product_list2'),
     path('product/add/', ProductCreateView.as_view() ,name='product_create'),
     path('product/edit/<int:pk>/', ProductUpdateView.as_view() ,name='product_update'),
     path('product/delete/<int:pk>/', ProductDeleteView.as_view() ,name='product_delete'),
-    # path('product/form/', ProductFromView.as_view() ,name='product_form'),
+    # path('porduct/form/', ProductFromView.as_view() ,name='product_form'),
 
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('category/list/', CategoryListView.as_view() ,name='category_list'),
+    path('category/add/', CategoryCreateView.as_view() ,name='category_create'),
+    path('category/edit/<int:pk>/', CategoryUpdateView.as_view() ,name='category_update'),
+    path('category/delete/<int:pk>/', CategoryDeleteView.as_view() ,name='category_delete'),
+
+    path('bom/add/', BomCreateView.as_view() ,name='bom_create'),
 
 ]
