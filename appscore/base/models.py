@@ -54,6 +54,7 @@ class Bom(models.Model):
 
     def tojson(self):
         item = model_to_dict(self)
+
         return item
 
     class Meta:

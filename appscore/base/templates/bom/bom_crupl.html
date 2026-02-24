@@ -2,7 +2,7 @@
 {% load static %}
 {% block head_form %}
     <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
-    <script src="{% static 'modeljs/bom_lst.js'  %}"></script>
+    <script src="{% static 'modeljs/bom_crupl.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
     </div>
     <div class="card-body" >
         {% csrf_token %}
-        <input type="hidden" name="action" value="{{ action }}">
+        <input type="hidden" name="action" id="action" value="{{ action }}">
         {% for field in form.visible_fields %}
             <div class="form-group">
             <label for="name">{{ field.label }}</label>

@@ -14,8 +14,8 @@ from django.utils.decorators import method_decorator
 from unicodedata import category
 
 #import appscore.base.urls
-from appscore.base.forms import ProductForm, CategoryForm, BomForm
-from appscore.base.models import Product, Category, Bom,Bomline
+from appscore.base.forms import ProductForm, CategoryForm
+from appscore.base.models import Product, Category
 
 
 def product_list(request):
@@ -30,7 +30,7 @@ class ProductListView(LoginRequiredMixin,ListView):
     template_name = 'product/product_lst.html'
     #permission_required = 'base.view_product' es un mixion que valida si el susuario tiene el permiso par ver etitar etc
     # @method_decorator(login_required)
-    #despues tambinen se debe agregar el tocken
+    #despues tambien se debe agregar el tocken
     #@method_decorator(csrf_exempt)#se usa para que no tenga seguridad de login este lugar
     # @method_decorator(login_required) se puede agregar el mixin en vez del decorador
     def dispatch(self, request, *args, **kwargs):
@@ -86,9 +86,11 @@ class ProductListView(LoginRequiredMixin,ListView):
         ###Nota:aqui podemos agarrar datos de contres para revisarlo
         #context['name'] = "Hola" #para el pasado forma de no clase
         #context['products'] = Product.objects.all() #para el pasado forma de no clases
-        context['title'] = "Listado de produtos"
+        context['title'] = "Listado de productos"
         context['create_url'] = reverse_lazy('baseu:product_create')
         return context
+
+
 class ProductCreateView(LoginRequiredMixin,CreateView):
     model = Product
     form_class = ProductForm
@@ -375,83 +377,5 @@ class CategoryDeleteView(LoginRequiredMixin,DeleteView):
     def dispatch(self, request, *args, **kwargs):
         return super(CategoryDeleteView, self).dispatch(request, *args, **kwargs)
 
-class BomCreateView(LoginRequiredMixin,CreateView):
-    model = Bom
-    form_class = BomForm
-    template_name = 'bom/bom_crupl.html'
-    success_url =  reverse_lazy('baseu:dashboard')
-
-    def post(self, request, *args, **kwargs):
-        data = {}
-
-        try:
-            body = json.loads(request.body)
-            action = body.get('action')
-
-            # 🟢 guardar BOM
-            if action == 'add':
-                print("addd333")
-                form = BomForm(body)
-
-                if form.is_valid():
-                    bom = form.save()
-
-                    print("****")
-                    for line in body.get('lines', []):
-                        print("-----")
-                        print(line)
-                        Bomline.objects.create(
-                            bom_id=bom,
-                            product_id=5,
-                            quantity=line                      ['quantity']
-                        )
-                        # Bomline.objects.create(
-                        #     bom_id=bom,
-                        #     product_id=Product.objects.get(id=line['product']),
-                        #     quantity=line['quantity']
-                        # )
-
-                    return JsonResponse({'success': True})
-
-                data['error'] = form.errors
-
-            elif action == 'searchdata':
-                return JsonResponse([], safe=False)
-            elif action == 'get_products':
-                products = Product.objects.all().values('id', 'name')
-                return JsonResponse(list(products), safe=False)
-
-        except Exception as e:
-            data['error'] = str(e)
-
-        return JsonResponse(data)
-    # def post(self, request, *args, **kwargs):
-    #     data = {}
-    #     try:
-    #         body = json.loads(request.body)
-    #         action = body.get('action')
-    #         if action == 'add':
-    #             form =  BomForm(body)
-    #             if form.is_valid():
-    #                 form.save()
-    #                 return JsonResponse({'success': True})
-    #             else:
-    #                 data['error'] = form.errors
-    #         else:
-    #             data['error'] ={'name': ['No ha ingresado a ninguna accion']}
-    #
-    #     except Exception as e:
-    #         data['error'] =  {'name': [str(e)]}
-    #     return JsonResponse(data)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de lista de materiales"
-        context['list_url'] = reverse_lazy('baseu:dashboard')
-        context['action'] = 'add'
-        return context
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(BomCreateView, self).dispatch(request, *args, **kwargs)
 
 

@@ -5,6 +5,7 @@ from django.urls import path
 from appscore.base.views.dashboard.views import DashboardView
 #from appscore.base.views.product.views import product_list
 from appscore.base.views.product.views import *
+from appscore.base.views.bom.views import *
 
 
 
@@ -28,5 +29,8 @@ urlpatterns = [
     path('category/delete/<int:pk>/', CategoryDeleteView.as_view() ,name='category_delete'),
 
     path('bom/add/', BomCreateView.as_view() ,name='bom_create'),
+    path('bom/list/', BomListView.as_view() ,name='bom_list'),
+    path('bom/edit/<int:pk>/', BomUpdateView.as_view() ,name='bom_update'),
+    path('bom/delete/<int:pk>/', BomDeleteView.as_view() , name='bom_delete'),
 
 ]
