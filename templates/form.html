@@ -12,11 +12,10 @@
 
 <form method="post" action="." id="formGeneric">
 <div class="card" >
-    <div class="card-header">
-    <h5 class="card-title" >
-        {{ title }}
-    </h5>
-    </div>
+     <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0"> {{ title }} </h5>
+        <a class="link-secondary" href="{{ list_url }}"> Lista </a>
+     </div>
     <div class="card-body" >
         {% csrf_token %}
         <input type="hidden" name="action" value="{{ action }}">
@@ -29,12 +28,43 @@
     </div>
     <div class="card-footer">
     <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+        <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
     </div>
 </div>
 </form>
 {% endblock %}
 
 {% block javascript %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formGeneric');
+    form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const dataToSend = Object.fromEntries(formData.entries());
+    try {
+        const response = await fetch( window.location.pathname, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',// solo modelos sin imagen
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(dataToSend)
+        });
+           const data = await response.json();
+           if (data.success) {
+               {#//window.location.href = "{% url 'baseu:uom_list' %}";#}
+               window.location.pathname
+           } else {
+                console.log("Errores:", data.error);
+                message_error(data.error);
+           }
+    } catch (error) {
+        console.log("un error de catch")
+    }
+ }); });
+</script>
 
 {% endblock %}
 

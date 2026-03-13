@@ -2,33 +2,425 @@
 {% load static %}
 {% block head_form %}
     <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
+    <script src="{% static 'modeljs/product_crupl.js' %}"  ></script>
 {% endblock %}
+
 
 {% block content %}
-    <form method="post" action="." id="formGeneric">
+
+<form method="post" action="." id="formGeneric">
     <div class="card" >
-        <div class="card-header">
-        <h3 class="card-title" >
-            {{ title }}
-        </h3>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0"> {{ title }} </h5>
+            <a class="link-secondary" href="{{ list_url }}"> Lista </a>
         </div>
-        <div class="card-body" >
-            {% csrf_token %}
-            <input type="hidden" name="action" value="{{ action }}">
-            {% for field in form.visible_fields %}
-                <div class="form-group">
-                <label for="name">{{ field.label }}</label>
-                {{ field }}
+    <div class="card-body" >
+        {% csrf_token %}
+        <input type="hidden" name="action" id="action" value="{{ action }}">
+
+      <div class="container">
+      <div class="row g-2 ">
+
+        <div class="col-md-6 ">
+          <div class="row align-items-center ">
+            <label for="{{ form.name.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.name.label }} </label>
+            <div class="col-sm-9"> {{ form.name }} </div>
+          </div>
+        </div>
+
+{#        <div class="col-md-6">#}
+{#          <div class="row align-items-center ">#}
+{#            <label for="{{ form.type.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.type.label }} </label>#}
+{#            <div class="col-sm-9"> {{ form.type }} </div>#}
+{#          </div>#}
+{#        </div>#}
+        <div class="col-md-6">
+          <div class="row align-items-center ">
+            <label for="{{ form.code.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.code.label }} </label>
+            <div class="col-sm-9"> {{ form.code }} </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row align-items-center">
+            <label for="{{ form.description.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.description.label }} </label>
+            <div class="col-sm-9"> {{ form.description }} </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row align-items-center">
+            <label for="{{ form.description_us.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.description_us.label }} </label>
+            <div class="col-sm-9"> {{ form.description_us }} </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row align-items-center">
+            <label for="{{ form.category.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.category.label }} </label>
+            <div class="col-sm-9"> {{ form.category }} </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row align-items-center ">
+            <label for="{{ form.type.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.type.label }} </label>
+            <div class="col-sm-9"> {{ form.type }} </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row align-items-center">
+            <label for="{{ form.active.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.active.label }} </label>
+            <div class="col-sm-9"> {{ form.active }} </div>
+          </div>
+        </div>
+
+{#        <div class="col-md-6">#}
+{#           <label for="{{ form.active.id_for_label }}"  class="col-sm-2 form-check-label" >{{ form.active.label }}</label>#}
+{#           <input type="checkbox" name="{{ form.active.name }}" id="{{ form.active.id_for_label }}" class="form-check-input" {% if form.active.value %}checked{% endif %} >#}
+{#        </div>#}
+
+        <div class="col-md-6">
+          <div class="row align-items-center">
+            <label for="{{ form.status.id_for_label }}" class="col-sm-3 col-form-label"> Estado </label>
+            <div class="col-sm-9"> {{ form.status }} </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      </div>
+
+{#        {% for field in form.visible_fields %}#}
+{#            <div class="form-group">#}
+{#            <label for="name"  class="col-form-label" >{{ field.label }}</label>#}
+{#            {{ field }}#}
+{#            </div>#}
+{##}
+{#        {% endfor %}#}
+
+
+    <br>
+    <ul class="nav nav-tabs justify-content-end" id="Tab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true">Información</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link " id="cost-tab" data-bs-toggle="tab" data-bs-target="#cost" type="button" role="tab" aria-controls="cost" aria-selected="true">Costos</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link " id="home-tab" data-bs-toggle="tab" data-bs-target="#SUPPLIER" type="button" role="tab" aria-controls="home" aria-selected="true">Proveedores</button>
+      </li>
+
+    </ul>
+    <div class="tab-content" id="infoTabContent">
+    <div class="tab-pane fade show active mb-3" id="info" role="tabpanel" aria-labelledby="info-tab">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="row mb-1" >
+                        <label for="sector"  class="col-sm-2 col-form-label" >{{ form.sector.label }}</label>
+                        <div class="col-sm-10"> {{ form.sector }} </div>
+                    </div>
                 </div>
-            {% endfor %}
+                <div class="col">
+                     <div class="row mb-1" >
+                        <label for="country"  class="col-sm-2 col-form-label" >{{ form.country.label }}</label>
+                        <div class="col-sm-10"> {{ form.country }} </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-footer">
-        <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+
+        <div class="container  mb-3 form-control"  >
+            <div class="row " >
+                <div class="col ">
+                    <div class="form-group " >
+                        <label for="fraction_mx"  class="col-form-label" >{{ form.fraction_mx.label }}</label>
+                         {{ form.fraction_mx }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group " >
+                        <label for="fraction_htsus"  class="col-form-label">{{ form.fraction_htsus.label }}</label>
+                        {{ form.fraction_htsus }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group " >
+                        <label for="fraction_us"  class="col-form-label" >{{ form.fraction_us.label }}</label>
+                        {{ form.fraction_us }}
+                    </div>
+                </div>
+                <div class="col ">
+                    <div class="form-group " >
+                        <label for="fraction_us_exp"  class="col-form-label"> {{ form.fraction_us_exp.label }}</label>
+                        {{ form.fraction_us_exp }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="row">
+    <div class="col">
+
+    <div class="container form-control"  >
+        <h6>Factores</h6>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_bom"  class="col-sm" >Bom</label>
+                    <div class="col-sm"> {{ form.fac_bom }} </div>
+                    <div class="col-sm"> {{ form.fac_bom_uom }} </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_po"  class="col-sm col-form-label" >Compra</label>
+                    <div class="col-sm"> {{ form.fac_po }} </div>
+                    <div class="col-sm"> {{ form.fac_po_uom }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_co"  class="col-sm col-form-label" >Venta</label>
+                    <div class="col-sm"> {{ form.fac_so }} </div>
+                    <div class="col-sm"> {{ form.fac_so_uom }} </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_co"  class="col-sm col-form-label" >Comercial</label>
+                    <div class="col-sm"> {{ form.fac_co }} </div>
+                    <div class="col-sm"> {{ form.fac_co_uom }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_rate"  class="col-sm col-form-label" >UMT</label>
+                    <div class="col-sm"> {{ form.fac_rate }} </div>
+                    <div class="col-sm"> {{ form.fac_rate_uom }} </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="fac_rate_us"  class="col-sm col-form-label" >Tarifa US</label>
+                    <div class="col-sm"> {{ form.fac_rate_us }} </div>
+                    <div class="col-sm"> {{ form.fac_rate_us_uom }} </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <div class="col col-sm-3">
+        <div class="container form-control"  >
+            <h6>Peso</h6>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="weight_pack"  class="col-sm col-form-label" >Empaque</label>
+                    <div class="col-sm"> {{ form.weight_pack }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="weight_mat"  class="col-sm col-form-label" >Material</label>
+                    <div class="col-sm"> {{ form.weight_mat }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="weight"  class="col-sm col-form-label" >{{ form.weight.label }}</label>
+                    <div class="col-sm"> {{ form.weight }} </div>
+                </div>
+            </div>
+        </div>
+    {#    <div class="row">#}
+    {#        <div class="col">#}
+    {#            <div class="row mb-3" >#}
+    {#                <label for="weight_lb"  class="col-sm-2 col-form-label" >{{ form.weight-lb.label }}</label>#}
+    {#                <div class="col-sm-10"> {{ form.weight_lb }} </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div> #}
+        </div>
+        </div>
+
+    </div>
+    </div>
+    </div>
+
+    <div class="tab-content" id="costTabContent">
+    <div class="tab-pane fade show  mb-3" id="cost" role="tabpanel" aria-labelledby="cost-tab">
+    <div class="container">
+         <div class="row">
+            <div class="col">
+                <div class="row mb-1" >
+                    <label for="cost"  class="col-sm-2 col-form-label" >{{ form.cost.label }}</label>
+                    <div class="col-sm-10"> {{ form.cost }} </div>
+                </div>
+            </div>
+            <div class="col">
+                 <div class="row mb-1" >
+                    <label for="cost_av"  class="col-sm-2 col-form-label" >{{ form.cost_av.label }}</label>
+                    <div class="col-sm-10"> {{ form.cost_av }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            <div class="container form-control"  >
+            <h6>Materia prima</h6>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_pack"  class="col-sm col-form-label" >Materia prima</label>
+                            <div class="col-sm"> {{ form.cd_mat_or }} </div>
+                            <div class="col-sm"> {{ form.cd_mat_nor }} </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_mat"  class="col-sm col-form-label" >Empaques</label>
+                            <div class="col-sm"> {{ form.cd_pack_or }} </div>
+                            <div class="col-sm"> {{ form.cd_pack_nor }} </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            <div class="col col-sm-5">
+            <div class="container form-control"  >
+            <h6>Valor agregado</h6>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_pack"  class="col-sm col-form-label" >Indirectos</label>
+                            <div class="col-sm"> {{ form.cd_av_ind }} </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_mat"  class="col-sm col-form-label" >Directos</label>
+                            <div class="col-sm"> {{ form.cd_av_dir }} </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_mat"  class="col-sm col-form-label" >Nacionales</label>
+                            <div class="col-sm"> {{ form.cd_av_nat }} </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
         </div>
     </div>
-    </form>
-{% endblock %}
+    </div>
+    </div>
 
+
+    <div class="tab-content" id="suppTabContent">
+    <div class="tab-pane fade show " id="SUPPLIER" role="tabpanel" aria-labelledby="home-tab">
+
+
+    {#    <div class="d-flex justify-content-between align-content-end">#}
+    {#        <button type="button" class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#lineModal">#}
+    {#            Agregar línea#}
+    {#        </button>#}
+    {##}
+    {#        </div>#}
+     <table class="table" id="datatableid" >
+     <thead>
+      {% block columns %}
+          <tr>
+          <th scope="col" style="width: 10%;" > #</th>
+          <th scope="col">Nombre</th>
+          <th>Precio</th>
+          <th scope="col"  style="width: 20%;"  >Acciones:
+{#              <div class="d-flex justify-content-end">#}
+              <button type="button" class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#lineModal">
+                Agregar línea
+              </button>
+{#              </div>#}
+          </th>
+          </tr>
+      {% endblock %}
+      </thead>
+      <tbody>
+      {% block rows %}
+
+      {% endblock %}
+      </tbody>
+    </table>
+
+
+    </div>
+    </div>
+
+    </div>
+
+    <div class="card-footer">
+    <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
+    </div>
+</div>
+</form>
+
+
+<div class="modal fade" id="lineModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar línea</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+            <label>Provedor</label>
+            <select id="modalSupplier" class="form-select"></select>
+        </div>
+
+        <div class="mb-3">
+            <label>Precio</label>
+            <input type="number" id="modalPrice" class="form-control" value="1" min="1">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" id="btnSaveLine" class="btn btn-primary">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
 {% block javascript %}
 
 {% endblock %}

@@ -9,29 +9,37 @@
 
 <form method="post" action="." id="formGeneric">
 <div class="card" >
-    <div class="card-header">
-    <h5 class="card-title" >
-        {{ title }}
-    </h5>
-    </div>
+     <div class="card-header d-flex justify-content-between align-items-center">
+         <h5 class="card-title mb-0"> {{ title }} </h5>
+         <a class="link-secondary" href="{{ list_url }}"> Lista </a>
+     </div>
     <div class="card-body" >
         {% csrf_token %}
         <input type="hidden" name="action" id="action" value="{{ action }}">
         {% for field in form.visible_fields %}
             <div class="form-group">
-            <label for="name">{{ field.label }}</label>
+            <label for="name"  class="col-form-label" >{{ field.label }}</label>
             {{ field }}
             </div>
+
         {% endfor %}
-    <hr>
-    <samp>Detalle</samp>
-    <hr>
-    <div class="d-flex justify-content-between">
-            <h6>Detalle</h6>
-            <button type="button" class="btn btn-primary btn-sm" id="btnAddLine">
-                Agregar línea
-            </button>
-        </div>
+
+    <br>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Lineas</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+{##}
+{#    <div class="d-flex justify-content-between">#}
+{#            <h6>Detalle</h6>#}
+{#            <button type="button" class="btn btn-secondary btn-sm" id="btnAddLine">#}
+{#                Agregar línea#}
+{#            </button>#}
+{#        </div>#}
      <table class="table" id="datatableid" >
       <thead>
       {% block columns %}
@@ -39,7 +47,11 @@
           <th scope="col" style="width: 10%;" > #</th>
           <th scope="col">Nombre</th>
           <th>Cantidad</th>
-          <th scope="col"  style="width: 20%;"  >Acciones</th>
+          <th scope="col"  style="width: 20%;"  >Acciones
+          <button type="button" class="btn btn-secondary btn-sm" id="btnAddLine">
+                Agregar línea
+          </button>
+          </th>
           </tr>
 
       {% endblock %}
@@ -52,9 +64,14 @@
 
       </tbody>
     </table>
+
+ </div>
+</div>
     </div>
+
     <div class="card-footer">
     <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
     </div>
 </div>
 </form>

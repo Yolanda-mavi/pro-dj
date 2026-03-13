@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let productOptions = [];
 
-    // 🔹 1️⃣ Cargar productos desde Django
+    // Cargar productos desde Django
     async function loadProducts() {
         try {
             const response = await fetch(window.location.pathname, {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 🔹 2️⃣ Construir combo
+    //  Construir combo
     function buildProductSelect(selectedId = '') {
         let html = `<select class="form-select form-select-sm input-product">`;
         html += `<option value="">Seleccione</option>`;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     }
 
-    // 🔹 3️⃣ Leer detalle
+    //  Leer detalle
     function getBomLines() {
         const rows = document.querySelectorAll('#datatableid tbody tr');
         const lines = [];
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return lines;
     }
 
-    // 🔹 4️⃣ Submit HEAD + DETAIL
+    // Submit HEAD + DETAIL
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -113,10 +113,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // 🔹 5️⃣ Esperar productos antes de crear tabla
+    // Esperar productos antes de crear tabla
     await loadProducts();
 
-    // 🔹 6️⃣ DataTable
+    //  DataTable
     const table = new DataTable('#datatableid', {
         data: [],
         columns: [
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadBomLines();
     }
 
-    // 🔹 7️⃣ Agregar línea
+    //  Agregar línea
     document.getElementById('btnAddLine').addEventListener('click', () => {
         table.row.add({
             product_id: '',
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).draw(false);
     });
 
-    // 🔹 8️⃣ Eliminar línea
+    //Eliminar línea
     document.querySelector('#datatableid tbody').addEventListener('click', e => {
         if (e.target.classList.contains('btn-delete')) {
             table.row(e.target.closest('tr')).remove().draw();
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const form = document.getElementById('formGeneric');
 
-    // 📦 función para leer las líneas del detalle
+    // función para leer las líneas del detalle
     function getBomLines() {
         const rows = document.querySelectorAll('#datatableid tbody tr');
         const data = [];
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return data;
     }
 
-    // 🧾 submit del form (HEAD + DETAIL)
+    // submit del form (HEAD + DETAIL)
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 🧩 DataTable
+    // DataTable
     const table = new DataTable('#datatableid', {
         ajax: {
             url: window.location.pathname,
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     });
 
-    // ➕ agregar fila
+    // agregar fila
     document.getElementById('btnAddLine').addEventListener('click', () => {
         table.row.add({
             id: null,
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     });
 
-    // 👉 Agregar línea (ejemplo simple)
+    // Agregar línea (ejemplo simple)
     document.getElementById('btnAddLine').addEventListener('click', () => {
         console.log("linea 29---");
         // const productId = prompt("ID producto34");
@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         table.clear().rows.add(bomLines).draw();
     });
 
-    // 👉 eliminar línea
+    // eliminar línea
     document.querySelector('#datatableid tbody').addEventListener('click', (e) => {
         if (e.target.classList.contains('btnRemove')) {
             const index = e.target.dataset.index;
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 👉 submit
+    // submit
     document.getElementById('formGeneric').addEventListener('submit', async (e) => {
         e.preventDefault();
 

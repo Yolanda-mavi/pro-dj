@@ -1,6 +1,9 @@
 {%  load static %}
+{#{% include 'importpop/importpop.html' %}#}
+{#<script src="{% static 'js/header_function.js' %}"></script>#}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Sistema</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,31 +11,119 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'baseu:dashboard' %}"> Inicio </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">Enlace</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Catalogos
+        <a class="nav-link dropdown-toggle" href="#" id="navbarInvo" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Facturación
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Facturas</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
+            <a class="dropdown-item" href="#">Clientes</a>
+            <a class="dropdown-item" href="#">Proveedores</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarInve" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Inventarios
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
           <a class="dropdown-item" href="{% url 'baseu:category_list' %}">Categorias</a>
           <a class="dropdown-item" href="{% url 'baseu:bom_list' %}">Lista de materiales</a>
+          <a class="dropdown-item" href="{% url 'baseu:uom_list' %}">Unidades de medida</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="indexm.html">Something else here</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarCat" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Catálogos
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <h6 class="dropdown-header">Inventario</h6>
+          <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
+          <a class="dropdown-item" href="{% url 'baseu:bom_list' %}">Lista de materiales</a>
+          <a class="dropdown-item" href="{% url 'baseu:category_list' %}">Categorías</a>
+          <a class="dropdown-item" href="{% url 'baseu:uom_list' %}">Unidades de medida</a>
+          <div class="dropdown-divider"></div>
+          <h6 class="dropdown-header">Fracciones</h6>
+          <a class="dropdown-item" href="{% url 'baseu:fhtsus_list' %}">Fracciones HTSUS</a>
+          <a class="dropdown-item" href="{% url 'baseu:fmx_list' %}">Fracciones arancelarias mexicana</a>
+          <a class="dropdown-item" href="{% url 'baseu:fus_list' %}">Fracciones de usa</a>
+          <a class="dropdown-item" href="{% url 'baseu:fusexp_list' %}">Fracciones de usa para exportación</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'baseu:country_list' %}">Países</a>
+          <a class="dropdown-item" href="{% url 'baseu:sector_list' %}">Sectores</a>
+{#          <a class="dropdown-item" href="indexm.html">Something else here</a>#}
+{#          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}
+
+{#            <button type="button" class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#lineModal">#}
+
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarActions" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Acciones
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>
         </div>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>
+
+{#      <li class="nav-item dropdown ">#}
+{#        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#          Usuario: {{ request.user.username}}#}
+{#        </a>#}
+{#        <div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
+{#          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}
+{#            <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>#}
+{#        </div>#}
+{#      </li>#}
+    </ul>
+
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" data-bs-toggle="dropdown">Usuario: {{ request.user.username }}</a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="{% url 'logout' %}"> Cerrar sesión </a>
+          </li>
+        </ul>
       </li>
-      <a class="nav-link" href="#">{{ request.user.username}}</a>
     </ul>
 
   </div>
 </nav>
+
+
+<div class="modal fade" id="windModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" id="modalContent">
+      <!-- Aquí se cargará la vista -->
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+document.getElementById("OpenImport").addEventListener("click", function(e){
+    e.preventDefault();
+    fetch(this.dataset.url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("modalContent").innerHTML = html;
+            var modal = new bootstrap.Modal(document.getElementById('windModal'));
+            modal.show();
+        });
+  });
+</script>

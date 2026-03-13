@@ -8,22 +8,22 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView,DeleteView,FormView
-from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
-from unicodedata import category
+from django.views.generic import ListView, CreateView, UpdateView,DeleteView
+from django.shortcuts import render
+# from django.utils.decorators import method_decorator
+# from unicodedata import category
 
 #import appscore.base.urls
-from appscore.base.forms import ProductForm, CategoryForm
-from appscore.base.models import Product, Category
+from appscore.base.forms import ProductForm, CategoryForm, ProductUomForm
+from appscore.base.models import Product, Category,ProductSupplier,models, Partner, ProductUom
 
 
 def product_list(request):
     data = {'name': 'Hola',
             'products': Product.objects.all(),
-            'title':"Listado de produtos"}
+            'title':"Listado de productos"}
 
-    return render(request, 'product/product_list.html', data)
+    return render(request, 'product/product_lst.html', data)
 
 class ProductListView(LoginRequiredMixin,ListView):
     model = Product
@@ -90,66 +90,48 @@ class ProductListView(LoginRequiredMixin,ListView):
         context['create_url'] = reverse_lazy('baseu:product_create')
         return context
 
-
 class ProductCreateView(LoginRequiredMixin,CreateView):
     model = Product
     form_class = ProductForm
-    template_name = 'product/product_crt.html'
+    template_name = 'product/product_crupl.html'
     success_url =  reverse_lazy('baseu:product_list')
 
     def post(self, request, *args, **kwargs):
         data = {}
-        #print("Hola vistas create")
-        #error=''
         try:
-            #action =request.POST['action']
             body = json.loads(request.body)
             action = body.get('action')
-            ##################
-            #para usar imagen se usa este comando
-            #action = request.POST.get('action')
-            ##############################
             if action == 'add':
-                #form = self.get_form()
-                #########################
-                #para usar iamgen se usa el sigueite
-                #form = ProductForm(request.POST, request.FILES)
-                ###################
-                form =  ProductForm(body)
-                #form = ProductForm(request.POST) es lo mismo que la linea anterior
+                form = ProductForm(body)
                 if form.is_valid():
-                    form.save()
+                    with transaction.atomic():
+                        Prod = form.save()
+                        supplier_lines = []
+                        for line in body.get('lines', []):
+                            supplier_lines.append(
+                                ProductSupplier(
+                                    product_id=Prod.id,
+                                    partner_id=line['partner_id'],
+                                    price=line['price']
+                                )
+                            )
+                        ProductSupplier.objects.bulk_create(supplier_lines)
                     return JsonResponse({'success': True})
-                    #return JsonResponse({'success': True , 'redirect_url': '/products/' })
-                else:
-                    #data= form.errors
-                    #error = form.errors
-                    data['error'] = form.errors
-            else:
-                data['error'] ={'name': ['No ha ingresado a ninguna accion']}
-                #error = "No ha ingresado a ninguna accion"
-            #data = Product.objects.get(pk=request.POST['id']).tojson()
+
+                data['error'] = form.errors
+
+            elif action == 'get_suppliers':
+                partner = Partner.objects.all().values('id', 'name')
+                return JsonResponse(list(partner), safe=False)
+
         except Exception as e:
-            data['error'] =  {'name': [str(e)]}
-            #error = str(e)
+            data['error'] = str(e)
+
         return JsonResponse(data)
-        # return JsonResponse({
-        #     'success': False,
-        #     'errors': error
-        # }, status=400)
-    # def post(self, request, *args, **kwargs):
-    #     form = ProductForm(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return HttpResponseRedirect(self.success_url)
-    #     self.object = None
-    #     context = self.get_context_data(**kwargs) #para que envie el titulo
-    #     context['form'] = form
-    #     return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de productos"
+        context['title'] = "Crear producto"
         context['list_url'] = reverse_lazy('baseu:product_list')
         context['action'] = 'add'
         return context
@@ -161,29 +143,55 @@ class ProductCreateView(LoginRequiredMixin,CreateView):
 class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductForm
-    template_name = 'product/product_crt.html'
+    template_name = 'product/product_crupl.html'
     success_url = reverse_lazy('baseu:product_list')
+
     def post(self, request, *args, **kwargs):
         data = {}
-        #print("post update edit")
         try:
             self.object = self.get_object()
             body = json.loads(request.body)
             action = body.get('action')
-            #print("====")
-            #print(action)
+
             if action == 'edit':
+
                 form = ProductForm(body, instance=self.object)
-                #form =  ProductForm(body)
+
                 if form.is_valid():
-                    form.save()
+                    with transaction.atomic():
+                        Prod = form.save()
+                        ProductSupplier.objects.filter(product_id=Prod.id).delete()
+                        supplier_lines = [
+                            ProductSupplier(
+                                product_id=Prod.id,
+                                price=line['price'],
+                                partner_id=line['partner_id']
+                            )
+                            for line in body.get('lines', [])
+                        ]
+
+                        ProductSupplier.objects.bulk_create(supplier_lines)
+
                     return JsonResponse({'success': True})
-                else:
-                    data['error'] = form.errors
-            else:
-                data['error'] ={'name': ['No ha ingresado a ninguna accion']}
+
+                data['error'] = form.errors
+            elif action == 'get_lines':
+                lines = ProductSupplier.objects.filter(product_id=self.object.id).values(
+                    'id',
+                    'product_id',
+                    'price',
+                    'partner_id',
+                    product_name=models.F('product_id__name')
+                )
+                return JsonResponse(list(lines), safe=False)
+
+            elif action == 'get_suppliers':
+                suppliers = Partner.objects.all().values('id', 'name')
+                return JsonResponse(list(suppliers), safe=False)
+
         except Exception as e:
-            data['error'] =  {'name': [str(e)]}
+            data['error'] = str(e)
+
         return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
@@ -224,6 +232,115 @@ class ProductDeleteView(LoginRequiredMixin,DeleteView):
     def dispatch(self, request, *args, **kwargs):
         return super(ProductDeleteView, self).dispatch(request, *args, **kwargs)
 
+
+
+# class ProductCreateView(LoginRequiredMixin,CreateView):
+#     model = Product
+#     form_class = ProductForm
+#     template_name = 'product/product_crt.html'
+#     success_url =  reverse_lazy('baseu:product_list')
+#
+#     def post(self, request, *args, **kwargs):
+#         data = {}
+#         #print("Hola vistas create")
+#         #error=''
+#         try:
+#             #action =request.POST['action']
+#             body = json.loads(request.body)
+#             action = body.get('action')
+#             ##################
+#             #para usar imagen se usa este comando
+#             #action = request.POST.get('action')
+#             ##############################
+#             if action == 'add':
+#                 #form = self.get_form()
+#                 #########################
+#                 #para usar iamgen se usa el sigueite
+#                 #form = ProductForm(request.POST, request.FILES)
+#                 ###################
+#                 form =  ProductForm(body)
+#                 #form = ProductForm(request.POST) es lo mismo que la linea anterior
+#                 if form.is_valid():
+#                     form.save()
+#                     return JsonResponse({'success': True})
+#                     #return JsonResponse({'success': True , 'redirect_url': '/products/' })
+#                 else:
+#                     #data= form.errors
+#                     #error = form.errors
+#                     data['error'] = form.errors
+#             else:
+#                 data['error'] ={'name': ['No ha ingresado a ninguna accion']}
+#                 #error = "No ha ingresado a ninguna accion"
+#             #data = Product.objects.get(pk=request.POST['id']).tojson()
+#         except Exception as e:
+#             data['error'] =  {'name': [str(e)]}
+#             #error = str(e)
+#         return JsonResponse(data)
+#         # return JsonResponse({
+#         #     'success': False,
+#         #     'errors': error
+#         # }, status=400)
+#     # def post(self, request, *args, **kwargs):
+#     #     form = ProductForm(request.POST)
+#     #     if form.is_valid():
+#     #         form.save()
+#     #         return HttpResponseRedirect(self.success_url)
+#     #     self.object = None
+#     #     context = self.get_context_data(**kwargs) #para que envie el titulo
+#     #     context['form'] = form
+#     #     return render(request, self.template_name, context)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = "Creacion de productos"
+#         context['list_url'] = reverse_lazy('baseu:product_list')
+#         context['action'] = 'add'
+#         return context
+#
+#     #@method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super(ProductCreateView, self).dispatch(request, *args, **kwargs)
+#
+# class ProductUpdateView(LoginRequiredMixin,UpdateView):
+#     model = Product
+#     form_class = ProductForm
+#     template_name = 'product/product_crt.html'
+#     success_url = reverse_lazy('baseu:product_list')
+#     def post(self, request, *args, **kwargs):
+#         data = {}
+#         #print("post update edit")
+#         try:
+#             self.object = self.get_object()
+#             body = json.loads(request.body)
+#             action = body.get('action')
+#             #print("====")
+#             #print(action)
+#             if action == 'edit':
+#                 form = ProductForm(body, instance=self.object)
+#                 #form =  ProductForm(body)
+#                 if form.is_valid():
+#                     form.save()
+#                     return JsonResponse({'success': True})
+#                 else:
+#                     data['error'] = form.errors
+#             else:
+#                 data['error'] ={'name': ['No ha ingresado a ninguna accion']}
+#         except Exception as e:
+#             data['error'] =  {'name': [str(e)]}
+#         return JsonResponse(data)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = "Editar producto"
+#         context['list_url'] = reverse_lazy('baseu:product_list')
+#         context['action'] = 'edit'
+#         #print("hola update")
+#         return context
+#
+#     #@method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super(ProductUpdateView, self).dispatch(request, *args, **kwargs)
+
 #video 36 quedo mas o menos y comentar el ajax del form
 # class ProductFromView(FormView):
 #     form_class = ProductForm
@@ -250,7 +367,7 @@ class ProductDeleteView(LoginRequiredMixin,DeleteView):
 
 class CategoryListView(LoginRequiredMixin,ListView):
     model = Category
-    template_name = 'category/category_lst.html'
+    template_name = 'product/category_lst.html'
 
     def dispatch(self, request, *args, **kwargs):
         return super(CategoryListView, self).dispatch(request, *args, **kwargs)
@@ -284,7 +401,7 @@ class CategoryListView(LoginRequiredMixin,ListView):
 class CategoryCreateView(LoginRequiredMixin,CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = 'category/category_crt.html'
+    template_name = 'product/category_crt.html'
     success_url =  reverse_lazy('baseu:category_list')
 
     def post(self, request, *args, **kwargs):
@@ -319,7 +436,7 @@ class CategoryCreateView(LoginRequiredMixin,CreateView):
 class CategoryUpdateView(LoginRequiredMixin,UpdateView):
     model = Category
     form_class = CategoryForm
-    template_name = 'category/category_crt.html'
+    template_name = 'product/category_crt.html'
     success_url = reverse_lazy('baseu:category_list')
     def post(self, request, *args, **kwargs):
         data = {}
@@ -353,7 +470,7 @@ class CategoryUpdateView(LoginRequiredMixin,UpdateView):
 
 class CategoryDeleteView(LoginRequiredMixin,DeleteView):
     model = Category
-    template_name = "category/category_dlt.html"
+    template_name = "product/category_dlt.html"
     success_url = reverse_lazy('baseu:category_list')
 
     def post(self, request, *args, **kwargs):
@@ -376,6 +493,130 @@ class CategoryDeleteView(LoginRequiredMixin,DeleteView):
     #@method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(CategoryDeleteView, self).dispatch(request, *args, **kwargs)
+
+class ProductUomListView(LoginRequiredMixin,ListView):
+    model = ProductUom
+    template_name = 'product/uom_lst.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductUomListView, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            body = json.loads(request.body)
+            action = body.get('action')
+            if action == 'searchdata':
+                data = []
+                for i in ProductUom.objects.all():
+                    data.append(i.tojson())
+            else:
+                data['error'] = {'name': ["Ha ocurrido un error"]}
+        except Exception as e:
+            print(str(e))
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Listado de unidades de medida"
+        context['create_url'] = reverse_lazy('baseu:uom_create')
+        return context
+
+class ProductUomCreateView(LoginRequiredMixin,CreateView):
+    model = ProductUom
+    form_class = ProductUomForm
+    template_name = 'product/uom_crt.html'
+    success_url =  reverse_lazy('baseu:uom_list')
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            body = json.loads(request.body)
+            action = body.get('action')
+            if action == 'add':
+                form =  ProductUomForm(body)
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse({'success': True})
+                else:
+                    data['error'] = form.errors
+            else:
+                data['error'] ={'name': ['No ha ingresado a ninguna accion']}
+        except Exception as e:
+            data['error'] =  {'name': [str(e)]}
+        return JsonResponse(data)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Creacion de unidades de medida"
+        context['list_url'] = reverse_lazy('baseu:uom_list')
+        context['action'] = 'add'
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductUomCreateView, self).dispatch(request, *args, **kwargs)
+
+class ProductUomUpdateView(LoginRequiredMixin,UpdateView):
+    model = ProductUom
+    form_class = ProductUomForm
+    template_name = 'product/uom_crt.html'
+    success_url = reverse_lazy('baseu:uom_list')
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            self.object = self.get_object()
+            body = json.loads(request.body)
+            action = body.get('action')
+            if action == 'edit':
+                form = ProductUomForm(body, instance=self.object)
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse({'success': True})
+                else:
+                    data['error'] = form.errors
+            else:
+                data['error'] ={'name': ['No ha ingresado a ninguna accion']}
+        except Exception as e:
+            data['error'] =  {'name': [str(e)]}
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Editar unidad de medida"
+        context['list_url'] = reverse_lazy('baseu:uom_list')
+        context['action'] = 'edit'
+        return context
+
+    #@method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductUomUpdateView, self).dispatch(request, *args, **kwargs)
+
+class ProductUomDeleteView(LoginRequiredMixin,DeleteView):
+    model = ProductUom
+    template_name = "product/uom_dlt.html"
+    success_url = reverse_lazy('baseu:uom_list')
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            self.object = self.get_object()
+            with transaction.atomic():
+                self.object.delete()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            data['error'] = {'name': [str(e)]}
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Eliminar unidad de medida"
+        context['list_url'] = reverse_lazy('baseu:uom_list')
+        return context
+
+    #@method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductUomDeleteView, self).dispatch(request, *args, **kwargs)
 
 
 
