@@ -3,12 +3,15 @@
 {% block head_form %}
     <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
     <script src="{% static 'modeljs/product_crupl.js' %}"  ></script>
+    <link href="{% static  'lib/tomselect/tom-select.css'  %}" rel='stylesheet' >
+    <script src="{% static 'lib/tomselect/tom-select.complete.min.js' %}" ></script>
 {% endblock %}
 
 
 {% block content %}
 
 <form method="post" action="." id="formGeneric">
+
     <div class="card" >
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0"> {{ title }} </h5>
@@ -30,10 +33,10 @@
 
 {#        <div class="col-md-6">#}
 {#          <div class="row align-items-center ">#}
-{#            <label for="{{ form.type.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.type.label }} </label>#}
-{#            <div class="col-sm-9"> {{ form.type }} </div>#}
-{#          </div>#}
-{#        </div>#}
+{#            <label for="{{ form.type.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.type.label }} </label> #}
+{#            <div class="col-sm-9"> {{ form.type }} </div> #}
+{#          </div> #}
+{#        </div> #}
         <div class="col-md-6">
           <div class="row align-items-center ">
             <label for="{{ form.code.id_for_label }}" class="col-sm-3 col-form-label"> {{ form.code.label }} </label>
@@ -137,14 +140,16 @@
         <div class="container  mb-3 form-control"  >
             <div class="row " >
                 <div class="col ">
-                    <div class="form-group " >
+                    <div class="form-group" >
                         <label for="fraction_mx"  class="col-form-label" >{{ form.fraction_mx.label }}</label>
+{#                        <label for="{{ form.fraction_mx.id_for_label }}"  class="col-form-label" >{{ form.fraction_mx.label }}</label>#}
                          {{ form.fraction_mx }}
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group " >
                         <label for="fraction_htsus"  class="col-form-label">{{ form.fraction_htsus.label }}</label>
+{#                        <label for="{{ form.fraction_htsus.id_for_label }}"  class="col-form-label">{{ form.fraction_htsus.label }}</label>#}
                         {{ form.fraction_htsus }}
                     </div>
                 </div>
@@ -245,7 +250,7 @@
             <div class="col">
                 <div class="row mb-1" >
                     <label for="weight"  class="col-sm col-form-label" >{{ form.weight.label }}</label>
-                    <div class="col-sm"> {{ form.weight }} </div>
+                    <div class="col-sm"> {{ form.weight}} </div>
                 </div>
             </div>
         </div>
@@ -268,19 +273,31 @@
     <div class="tab-pane fade show  mb-3" id="cost" role="tabpanel" aria-labelledby="cost-tab">
     <div class="container">
          <div class="row">
-            <div class="col">
-                <div class="row mb-1" >
-                    <label for="cost"  class="col-sm-2 col-form-label" >{{ form.cost.label }}</label>
-                    <div class="col-sm-10"> {{ form.cost }} </div>
-                </div>
-            </div>
-            <div class="col">
-                 <div class="row mb-1" >
-                    <label for="cost_av"  class="col-sm-2 col-form-label" >{{ form.cost_av.label }}</label>
-                    <div class="col-sm-10"> {{ form.cost_av }} </div>
+{#            <div class="col">#}
+{#                <div class="row mb-1" >#}
+{#                    <label for="cost"  class="col-sm-2 col-form-label" >{{ form.cost.label }}</label>#}
+{#                    <div class="col-sm-10"> {{ form.cost }} </div>#}
+{#                </div>#}
+{#            </div>#}
+            <div class="col-sm-7 ">
+                 <div class="row mb-1 " >
+                    <label for="cost_av"  class="col-sm-4 col-form-label" >Costo total</label>
+                    <div class="col-sm-4"> {{ form.cost_tot }} </div>
+                    <label  class="col-sm-4 text-sm-center" >( costo unitario + valor agregado )</label>
                 </div>
             </div>
         </div>
+{#        <div class="row mb-2">#}
+{#        <label for="{{ form.cost_tot.id_for_label }}"#}
+{#               class="col-sm-2 col-form-label">#}
+{#            Costo total#}
+{#        </label>#}
+{##}
+{#        <div class="col-sm-10">#}
+{#            {{ form.cost_tot }}#}
+{#        </div>#}
+{#        </div>#}
+
         <div class="row">
             <div class="col">
             <div class="container form-control"  >
@@ -288,9 +305,19 @@
                 <div class="row">
                     <div class="col">
                         <div class="row mb-1" >
+                            <label class="col-sm col-form-label" ></label>
+                            <label class="col-sm col-form-label text-sm-center" >Originario</label>
+                            <label class="col-sm col-form-label text-sm-center" >No originario</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
                             <label for="weight_pack"  class="col-sm col-form-label" >Materia prima</label>
-                            <div class="col-sm"> {{ form.cd_mat_or }} </div>
-                            <div class="col-sm"> {{ form.cd_mat_nor }} </div>
+                            <div class="col-sm"> {{ form.uc_mat_or }} </div>
+                            <div class="col-sm"> {{ form.uc_mat_nor }} </div>
                         </div>
                     </div>
                 </div>
@@ -298,8 +325,28 @@
                     <div class="col">
                         <div class="row mb-1" >
                             <label for="weight_mat"  class="col-sm col-form-label" >Empaques</label>
-                            <div class="col-sm"> {{ form.cd_pack_or }} </div>
-                            <div class="col-sm"> {{ form.cd_pack_nor }} </div>
+                            <div class="col-sm"> {{ form.uc_pack_or }} </div>
+                            <div class="col-sm"> {{ form.uc_pack_nor }} </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col">
+                        <div class="row mb-1" >
+                            <label for="weight_mat"  class="col-sm col-form-label" >Sub-Total</label>
+                            <div class="col-sm"> {{ form.uc_or_stot }} </div>
+                            <div class="col-sm"> {{ form.uc_nor_stot }} </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="row">
+                    <div class="col">
+                        <hr>
+                        <div class="row mb-1" >
+                            <label class="col-sm-4 col-form-label" ></label>
+                            <label for="weight_mat"  class="col-sm-4 col-form-label" >Costo unitario</label>
+                            <div class="col-sm-4"> {{ form.cost }} </div>
                         </div>
                     </div>
                 </div>
@@ -308,12 +355,12 @@
             </div>
             <div class="col col-sm-5">
             <div class="container form-control"  >
-            <h6>Valor agregado</h6>
+                <h6>Valor agregado</h6>
                 <div class="row">
                     <div class="col">
                         <div class="row mb-1" >
                             <label for="weight_pack"  class="col-sm col-form-label" >Indirectos</label>
-                            <div class="col-sm"> {{ form.cd_av_ind }} </div>
+                            <div class="col-sm"> {{ form.cav_ind }} </div>
                         </div>
                     </div>
                 </div>
@@ -321,7 +368,7 @@
                     <div class="col">
                         <div class="row mb-1" >
                             <label for="weight_mat"  class="col-sm col-form-label" >Directos</label>
-                            <div class="col-sm"> {{ form.cd_av_dir }} </div>
+                            <div class="col-sm"> {{ form.cav_dir }} </div>
                         </div>
                     </div>
                 </div>
@@ -329,7 +376,16 @@
                     <div class="col">
                         <div class="row mb-1" >
                             <label for="weight_mat"  class="col-sm col-form-label" >Nacionales</label>
-                            <div class="col-sm"> {{ form.cd_av_nat }} </div>
+                            <div class="col-sm"> {{ form.cav_nat }} </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr>
+                        <div class="row mb-1" >
+                            <label for="weight_mat"  class="col-sm col-form-label" >Valor agregado</label>
+                            <div class="col-sm "> {{ form.cost_av }} </div>
                         </div>
                     </div>
                 </div>
@@ -387,6 +443,7 @@
     <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
     </div>
 </div>
+{#<div id="errorContainer"></div>#}
 </form>
 
 
@@ -401,7 +458,7 @@
 
       <div class="modal-body">
         <div class="mb-3">
-            <label>Provedor</label>
+            <label>Proveedor</label>
             <select id="modalSupplier" class="form-select"></select>
         </div>
 

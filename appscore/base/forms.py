@@ -11,11 +11,14 @@ class ProductForm(ModelForm):
         super(ProductForm, self).__init__(*args, **kwargs)
         #para propiedades en comun
         for form in self.visible_fields():
-            form.field.widget.attrs['class'] = 'form-control'
+            if form.name not in ['fraction_mx','country','sector','fraction_htsus','fraction_us','fraction_us_exp','category']:
+                 form.field.widget.attrs['class'] = 'form-control'
             form.field.widget.attrs['autocomplete'] = 'off'
             if form.widget_type == 'number':
                 form.field.widget.attrs['step'] = '0.01'
-                form.field.widget.attrs['style'] = '-moz-appearance: textfield;'
+                form.field.widget.attrs['style'] = '-moz-appearance: textfield; text-align: end;'
+            if form.name in ['cost_tot','cost_av','cost','uc_or_stot','uc_nor_stot']:
+                form.field.disabled = True
 
         self.fields['name'].widget.attrs['autofocus'] = True
 
@@ -25,7 +28,7 @@ class ProductForm(ModelForm):
         widgets = {
             #para pocos capos se puede perzonalizar asi los campos
             'name': TextInput(attrs={
-                'placeholder':"ingresar nombre",
+                'placeholder':"Ingresar nombre",
             }),
             'description': Textarea(attrs={
             'placeholder': "Ingresar descripción en espanol",
@@ -37,6 +40,14 @@ class ProductForm(ModelForm):
             'rows': 2,
             'cols': 100
             }),
+            # 'cost_tot': forms.TextInput(attrs={
+            #     'class': 'form-control text-end'
+            # })
+
+
+            # 'fraction_mx': forms.Select(attrs={'class': 'form-select'}),
+            # 'fraction_htsus': forms.Select(attrs={'class': 'form-select'})
+
             # 'cost': NumberInput(attrs={
             #     'class': 'form-control',
             #     'step': '0.01',
@@ -55,8 +66,10 @@ class ProductForm(ModelForm):
         cleaned = super().clean()
         if len(cleaned['name']) <5:
             #raise  form.ValidationError("ingresar nombre")
-            self.add_error('name',"no es muy long")
-        print(cleaned)
+            self.add_error('name',"Mayor a 5 ")
+        # if cleaned.get('type') != 'F': PARA VACIAR CAMPOS OCULTOS
+        #     cleaned['extra_field'] = None
+
         return cleaned
 
 class CategoryForm(ModelForm):
@@ -234,6 +247,14 @@ class ImportForm(forms.Form):
     type_list = [
         ('FractionMx', 'Fracciones Arancelaria Mexicana'),
         ('Product', 'Productos'),
+        ('Category', 'Categorias'),
+        ('ProductUom', 'Unidades de medida'),
+        ('Country', 'Países'),
+        ('Sector', 'Sectores'),
+        ('FractionHtsus', 'Fracciones HTSUS'),
+        ('FractionUs', 'Fracciones de usa'),
+        ('FractionUsExp', 'Fracciones de usa para exportación'),
+        ('Partner', 'Contactos'),
     ]
     model_name = forms.ChoiceField(initial='FractionMx',  choices=type_list)
     file_data = forms.FileField()

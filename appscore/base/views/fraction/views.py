@@ -99,7 +99,7 @@ class FractionMxUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Editar e fracción arancelaria mexicana"
+        context['title'] = "Editar fracción arancelaria mexicana"
         context['list_url'] = reverse_lazy('baseu:fmx_list')
         context['action'] = 'edit'
         return context
@@ -126,7 +126,7 @@ class FractionMxDeleteView(LoginRequiredMixin,DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Eliminar e fracción arancelaria mexicana"
+        context['title'] = "Eliminar fracción arancelaria mexicana"
         context['list_url'] = reverse_lazy('baseu:fmx_list')
         return context
 
@@ -223,7 +223,7 @@ class FractionHtsusUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Editar e fracción HTSUS"
+        context['title'] = "Editar fracción HTSUS"
         context['list_url'] = reverse_lazy('baseu:fhtsus_list')
         context['action'] = 'edit'
         return context
@@ -250,7 +250,7 @@ class FractionHtsusDeleteView(LoginRequiredMixin,DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Eliminar e fracción HTSUS"
+        context['title'] = "Eliminar fracción HTSUS"
         context['list_url'] = reverse_lazy('baseu:fhtsus_list')
         return context
 
@@ -347,7 +347,7 @@ class FractionUsUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Editar e fracción de usa"
+        context['title'] = "Editar fracción de usa"
         context['list_url'] = reverse_lazy('baseu:fus_list')
         context['action'] = 'edit'
         return context
@@ -374,7 +374,7 @@ class FractionUsDeleteView(LoginRequiredMixin,DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Eliminar e fracción de usa"
+        context['title'] = "Eliminar fracción de usa"
         context['list_url'] = reverse_lazy('baseu:fus_list')
         return context
 
@@ -471,7 +471,7 @@ class FractionUsExpUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Editar e fracción de usa para exportación"
+        context['title'] = "Editar fracción de usa para exportación"
         context['list_url'] = reverse_lazy('baseu:fusexp_list')
         context['action'] = 'edit'
         return context
@@ -498,7 +498,7 @@ class FractionUsExpDeleteView(LoginRequiredMixin,DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Eliminar e fracción de usa para exportación"
+        context['title'] = "Eliminar fracción de usa para exportación"
         context['list_url'] = reverse_lazy('baseu:fusexp_list')
         return context
 

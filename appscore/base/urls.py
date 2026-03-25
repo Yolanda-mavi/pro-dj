@@ -64,12 +64,12 @@ urlpatterns = [
     path('fmx/delete/<int:pk>/', FractionMxDeleteView.as_view(), name='fmx_delete'),
 
     path('fus/list/', FractionUsListView.as_view(), name='fus_list'),
-    path('fus/add/', FractionUsUpdateView.as_view(), name='fus_create'),
+    path('fus/add/', FractionUsCreateView.as_view(), name='fus_create'),
     path('fus/edit/<int:pk>/', FractionUsUpdateView.as_view(), name='fus_update'),
     path('fus/delete/<int:pk>/', FractionUsDeleteView.as_view(), name='fus_delete'),
 
     path('fusexp/list/', FractionUsExpListView.as_view(), name='fusexp_list'),
-    path('fusexp/add/', FractionUsExpUpdateView.as_view(), name='fusexp_create'),
+    path('fusexp/add/', FractionUsExpCreateView.as_view(), name='fusexp_create'),
     path('fusexp/edit/<int:pk>/', FractionUsExpUpdateView.as_view(), name='fusexp_update'),
     path('fusexp/delete/<int:pk>/', FractionUsExpDeleteView.as_view(), name='fusexp_delete'),
 

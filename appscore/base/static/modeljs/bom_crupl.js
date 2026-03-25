@@ -104,12 +104,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (data.success) {
                 window.location.href = "/base/bom/list/";
+                //window.location.href = "{{ list_url }}";
             } else {
-                console.error("Errores:", data.error);
+                //console.error("Errores:", data.error);
+                show_errors_toast(data.error);
+                //show_field_errors(data.error);
             }
 
         } catch (err) {
-            console.error("Error en submit", err);
+            //console.error("Error en submit", err);
+            show_errors_toast(err);
+            //show_field_errors(err);
         }
     });
 

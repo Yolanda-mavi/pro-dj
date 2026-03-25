@@ -31,6 +31,7 @@
         <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
     </div>
 </div>
+{#<div id="errorContainer"></div>#}
 </form>
 {% endblock %}
 
@@ -55,13 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
            const data = await response.json();
            if (data.success) {
                {#//window.location.href = "{% url 'baseu:uom_list' %}";#}
-               window.location.pathname
+               //window.location.pathname
+               window.location.href = "{{ list_url }}";
            } else {
-                console.log("Errores:", data.error);
-                message_error(data.error);
+                //console.log("Errores:", data.error);
+                //message_error(data.error);
+                show_errors_toast(data.error);
+                //show_field_errors(data.error); // opcional (para pintar inputs)
            }
     } catch (error) {
-        console.log("un error de catch")
+        //console.log("un error de catch")
+        show_errors_toast(error);
+        //show_field_errors(error);
     }
  }); });
 </script>

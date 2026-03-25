@@ -24,11 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         columns: [
             {"data": "id"},
-            {"data": "name"},
-            {"data": "name"}
+            {"data": "code"},
+            {"data": "nico"},
+            {"data": "nico"}
         ],
         columnDefs: [{
-            targets: [2],
+            targets: [3],
             className: 'text-center',
             orderable: false,
             render: function (data, type, row) {

@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import model_to_dict
 from django.conf import settings
-
+from django.db.models import F,DecimalField
 from core.models import AuditModel
 
 class Category(AuditModel):
@@ -44,8 +44,9 @@ class ProductUom(AuditModel):
         return item
 
 class Country(AuditModel):
-    code = models.CharField(max_length=15, verbose_name="Código", unique=True)
-    name = models.CharField(max_length=200, verbose_name="Nombre")
+    code_m3 = models.CharField(max_length=2, verbose_name="Clave SAAI M3",blank=True,null=True)
+    code_fiii = models.CharField(max_length=4, verbose_name="Clave SAAI FIII", unique=True,blank=True,null=True)
+    name = models.CharField(max_length=100, verbose_name="Nombre")
     active = models.BooleanField(default=True, verbose_name="Activo", choices=[(True, 'Si'), (False, 'No')])
     def __str__(self):
         # full_name = "[%s] %s" % (self.code or '', self.name or '')
@@ -62,7 +63,7 @@ class Country(AuditModel):
         return item
 
 class Sector(AuditModel):
-    code = models.CharField(max_length=15, verbose_name="Código", unique=True)
+    code = models.CharField(max_length=2, verbose_name="Código", unique=True)
     name = models.CharField(max_length=200, verbose_name="Nombre")
     active = models.BooleanField(default=True, verbose_name="Activo", choices=[(True, 'Si'), (False, 'No')])
 
@@ -82,13 +83,16 @@ class Sector(AuditModel):
 
 class FractionMx(AuditModel):
     code = models.CharField(max_length=15, verbose_name="Código", unique=True)
-    name = models.CharField(max_length=200, verbose_name="Nombre")
+    name = models.TextField(verbose_name="Nombre")
+    cal_imp = models.CharField(max_length=100, verbose_name="Importación",blank=True,null=True)
+    cal_exp = models.CharField(max_length=100, verbose_name="Exportación",blank=True,null=True)
     active = models.BooleanField(default=True, verbose_name="Activo", choices=[(True, 'Si'), (False, 'No')])
+
 
     def __str__(self):
         # full_name = "[%s] %s" % (self.code or '', self.name or '')
         # return full_name
-        return self.name
+        return self.code
 
     class Meta:
         db_table = 'fraction_mx'
@@ -100,19 +104,21 @@ class FractionMx(AuditModel):
         return item
 
 class FractionHtsus(AuditModel):
-    code = models.CharField(max_length=15, verbose_name="Código", unique=True)
-    name = models.CharField(max_length=200, verbose_name="Nombre")
+    code = models.CharField(max_length=15, verbose_name="Código")
+    nico = models.CharField(max_length=2, verbose_name="NICO", blank=True, null=True)
+    name = models.TextField( verbose_name="Nombre")
     active = models.BooleanField(default=True, verbose_name="Activo", choices=[(True, 'Si'), (False, 'No')])
 
     def __str__(self):
-        # full_name = "[%s] %s" % (self.code or '', self.name or '')
-        # return full_name
-        return self.name
+        full_name = "%s %s" % (self.code or '', self.nico or '')
+        return full_name
+        #return self.code
 
     class Meta:
         db_table = 'fraction_htsus'
         verbose_name = 'Fracción HTSUS'
         verbose_name_plural = 'Fracciones HTSUS'
+        unique_together = ('code', 'nico')
 
     def tojson(self):
         item = model_to_dict(self)
@@ -126,7 +132,7 @@ class FractionUs(AuditModel):
     def __str__(self):
         #full_name = "[%s] %s" % (self.code or '', self.name or '')
         #return full_name
-        return self.name
+        return self.code
 
     class Meta:
         db_table = 'fraction_us'
@@ -145,7 +151,7 @@ class FractionUsExp(AuditModel):
     def __str__(self):
         #full_name = "[%s] %s" % (self.code or '', self.name or '')
         #return full_name
-        return self.name
+        return self.code
 
     class Meta:
         db_table = 'fraction_us_exp'
@@ -204,29 +210,20 @@ class Product(AuditModel):
     fac_so = models.FloatField(default=0.0, verbose_name="Factor de venta")
     fac_so_uom = models.ForeignKey(ProductUom, on_delete=models.PROTECT, null=True, blank=True,verbose_name="Unidad de medida de venta",related_name="+")
 
-    cost = models.DecimalField(max_digits=10, decimal_places=4, default=0.0,verbose_name="Costo")
-    cost_av = models.DecimalField(max_digits=10, decimal_places=4, default=0.0,verbose_name="Valor agregado")
-    #cost_total = models.DecimalField(max_digits=10, decimal_places=4, default=0.0,verbose_name="Costo total") deberia ser calculado
+    cost = models.DecimalField(max_digits=10, decimal_places=4, default=0.0,  verbose_name="Costo unitario")
+    cost_av = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado")
 
-    cd_mat_or = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Materia prima originario")
-    cd_mat_nor = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Materia prima no originario")
-    cd_pack_or = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Empaques originario")
-    cd_pack_nor = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Empaques no originario")
-    #cd_or_stot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Sub-Total originario") debe calcular
-    #cd_nor_stot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Sub-Total no originario") debe calcular
-    #cd_tot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Costo Unitario") debe calcular
+    uc_mat_or = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Materia prima originario")
+    uc_mat_nor = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Materia prima no originario")
+    uc_pack_or = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Empaques originario")
+    uc_pack_nor = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Empaques no originario")
+    uc_or_stot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0,  verbose_name="Sub-Total originario")
+    uc_nor_stot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Sub-Total no originario")
 
-    cd_av_ind = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado indirectos")
-    cd_av_dir = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado directos")
-    cd_av_nat = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado nacionales")
-    #cd_av_stot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado Sub-Total") valor calculado
-    #cd_av_tot = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Costo Unitario + Valor agregado") calor calculado
-
-
-
-
-
-
+    cav_ind = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado indirectos")
+    cav_dir = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado directos")
+    cav_nat = models.DecimalField(max_digits=10, decimal_places=4, default=0.0, verbose_name="Valor agregado nacionales")
+    cost_tot = models.DecimalField(max_digits=10,decimal_places=4, default=0.0, verbose_name="costo total" )
 
     def tojson(self):
         #item ={'id':self.id, 'name':self.name} #para pocos campos
@@ -241,6 +238,14 @@ class Product(AuditModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.uc_or_stot = (self.uc_mat_or or 0) + (self.uc_pack_or or 0)
+        self.uc_nor_stot = (self.uc_mat_nor or 0) + (self.uc_pack_nor or 0)
+        self.cost = (self.uc_mat_or or 0) + (self.uc_pack_or or 0) + (self.uc_mat_nor or 0) + (self.uc_pack_nor or 0)
+        self.cost_av = (self.cav_ind or 0) + (self.cav_dir or 0) + (self.cav_nat or 0)
+        self.cost_tot = (self.uc_mat_or or 0) + (self.uc_pack_or or 0) + (self.uc_mat_nor or 0) + (self.uc_pack_nor or 0) + (self.cav_ind or 0) + (self.cav_dir or 0) + (self.cav_nat or 0)
+        super().save(*args, **kwargs)
 
 class Partner(AuditModel):
     name = models.CharField(max_length=200, verbose_name="Nombre")
