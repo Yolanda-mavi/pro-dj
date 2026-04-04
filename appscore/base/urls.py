@@ -12,6 +12,7 @@ from appscore.base.views.importpop.views import *
 from appscore.base.views.country.views import *
 from appscore.base.views.sector.views import *
 from appscore.base.views.fraction.views import *
+from appscore.base.views.partner.views import *
 
 
 app_name = 'baseu'
@@ -72,6 +73,11 @@ urlpatterns = [
     path('fusexp/add/', FractionUsExpCreateView.as_view(), name='fusexp_create'),
     path('fusexp/edit/<int:pk>/', FractionUsExpUpdateView.as_view(), name='fusexp_update'),
     path('fusexp/delete/<int:pk>/', FractionUsExpDeleteView.as_view(), name='fusexp_delete'),
+
+    path('partner/list/', PartnerListView.as_view(), name='partner_list'),
+    path('partner/add/', PartnerCreateView.as_view(), name='partner_create'),
+    path('partner/edit/<int:pk>/', PartnerUpdateView.as_view(), name='partner_update'),
+    path('partner/delete/<int:pk>/', PartnerDeleteView.as_view(), name='partner_delete'),
 
     path('import/add/', import_modal_view ,name='import_modal'),
 

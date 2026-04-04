@@ -14,7 +14,7 @@ from django.shortcuts import render
 # from unicodedata import category
 
 #import appscore.base.urls
-from appscore.base.forms import ProductForm, CategoryForm, ProductUomForm
+from appscore.base.forms import ProductForm, CategoryForm, ProductUomForm, comun_layout,customfield2_layout
 from appscore.base.models import Product, Category,ProductSupplier,models, Partner, ProductUom
 
 
@@ -131,9 +131,37 @@ class ProductCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        form = context.get('form')
         context['title'] = "Crear producto"
         context['list_url'] = reverse_lazy('baseu:product_list')
         context['action'] = 'add'
+        context['formf_head'] = comun_layout(form, [
+            ['name', 'code'],
+            ['description', 'description_us'],
+            ['category', 'type'],
+            ['active', 'status']
+        ])
+        context['formf_tabinfo'] = comun_layout(form, [
+            ['sector', 'country'],
+            ['fraction_mx', 'fraction_htsus','fraction_us','fraction_us_exp'],
+        ])
+        context['formf_customfield2'] = customfield2_layout(form, [
+            ['fac_bom', 'fac_bom_uom', 'fac_po', 'fac_po_uom'],
+            ['fac_so', 'fac_so_uom', 'fac_co', 'fac_co_uom'],
+            ['fac_rate', 'fac_rate_uom', 'fac_rate_us', 'fac_rate_us_uom']
+        ])
+        context['formf_weigth'] = comun_layout(form, [
+            ['weight_pack'],
+            ['weight_mat'],
+            ['weight'],
+        ])
+        context['formf_matcost'] = customfield2_layout(form, [
+            ['uc_mat_or', 'uc_mat_nor'],
+            ['uc_pack_or', 'uc_pack_nor'],
+            ['uc_or_stot', 'uc_nor_stot'],
+        ])
+
+
         return context
 
     #@method_decorator(login_required)
@@ -196,9 +224,38 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        form = context.get('form')
         context['title'] = "Editar producto"
         context['list_url'] = reverse_lazy('baseu:product_list')
         context['action'] = 'edit'
+        context['formf_head'] = comun_layout(form, [
+            ['name', 'code'],
+            ['description', 'description_us'],
+            ['category', 'type'],
+            ['active', 'status']
+        ])
+        context['formf_tabinfo'] = comun_layout(form, [
+            ['sector', 'country'],
+            ['fraction_mx', 'fraction_htsus', 'fraction_us', 'fraction_us_exp'],
+        ])
+        context['formf_customfield2'] = customfield2_layout(form, [
+            [ 'fac_bom', 'fac_bom_uom','fac_po', 'fac_po_uom'],
+            ['fac_so', 'fac_so_uom','fac_co', 'fac_co_uom'],
+            ['fac_rate', 'fac_rate_uom','fac_rate_us', 'fac_rate_us_uom']
+        ])
+        context['formf_weigth'] = comun_layout(form, [
+            ['weight_pack'],
+            ['weight_mat'],
+            ['weight'],
+        ])
+
+        context['formf_matcost'] = customfield2_layout(form, [
+            ['uc_mat_or', 'uc_mat_nor'],
+            ['uc_pack_or', 'uc_pack_nor'],
+            ['uc_or_stot', 'uc_nor_stot'],
+
+        ])
+
         #print("hola update")
         return context
 
@@ -425,7 +482,7 @@ class CategoryCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de categorias"
+        context['title'] = "Crear categorias"
         context['list_url'] = reverse_lazy('baseu:category_list')
         context['action'] = 'add'
         return context
@@ -549,7 +606,7 @@ class ProductUomCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de unidades de medida"
+        context['title'] = "Crear unidade de medida"
         context['list_url'] = reverse_lazy('baseu:uom_list')
         context['action'] = 'add'
         return context

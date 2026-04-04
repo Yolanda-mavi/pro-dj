@@ -1,0 +1,22 @@
+.form-label-fixed {
+  width: 140px;
+  text-align: left;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.col-form-label {
+  line-height: 1.2;
+}
+
+.label-auto {
+    display: inline-block;
+    min-width: 120px;
+    text-align: right;
+}
+
+/*
+.dropdown-submenu { position: relative; }
+.dropdown-submenu > .dropdown-menu { top: 0; left: 100%; display: none; }
+.dropdown-submenu:hover > .dropdown-menu { display: block; }
+*/

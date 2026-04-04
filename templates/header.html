@@ -1,6 +1,6 @@
 {%  load static %}
-{#{% include 'importpop/importpop.html' %}#}
-{#<script src="{% static 'js/header_function.js' %}"></script>#}
+<!--{#{% include 'importpop/importpop.html' %}#}-->
+<!--{#<script src="{% static 'js/header_function.js' %}"></script>#}-->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Sistema</a>
@@ -24,7 +24,7 @@
             <a class="dropdown-item" href="#">Facturas</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
-            <a class="dropdown-item" href="#">Clientes</a>
+            <a class="dropdown-item" href="{% url 'baseu:partner_list' %}">Clientes</a>
             <a class="dropdown-item" href="#">Proveedores</a>
         </div>
       </li>
@@ -52,7 +52,7 @@
           <a class="dropdown-item" href="{% url 'baseu:category_list' %}">Categorías</a>
           <a class="dropdown-item" href="{% url 'baseu:uom_list' %}">Unidades de medida</a>
           <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Fracciones</h6>
+          <h6 class="dropdown-header ">Fracciones</h6>
           <a class="dropdown-item" href="{% url 'baseu:fhtsus_list' %}">Fracciones HTSUS</a>
           <a class="dropdown-item" href="{% url 'baseu:fmx_list' %}">Fracciones arancelarias mexicana</a>
           <a class="dropdown-item" href="{% url 'baseu:fus_list' %}">Fracciones de usa</a>
@@ -60,10 +60,10 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{% url 'baseu:country_list' %}">Países</a>
           <a class="dropdown-item" href="{% url 'baseu:sector_list' %}">Sectores</a>
-{#          <a class="dropdown-item" href="indexm.html">Something else here</a>#}
-{#          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}
+<!--{#        <a class="dropdown-item" href="indexm.html">Something else here</a>#}-->
+<!--{#        <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}-->
 
-{#            <button type="button" class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#lineModal">#}
+<!--{#            <button type="button" class="btn btn-secondary btn-sm " data-bs-toggle="modal" data-bs-target="#lineModal">#}-->
 
         </div>
       </li>
@@ -79,15 +79,15 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
 
-{#      <li class="nav-item dropdown ">#}
-{#        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#          Usuario: {{ request.user.username}}#}
-{#        </a>#}
-{#        <div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
-{#          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}
-{#            <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>#}
-{#        </div>#}
-{#      </li>#}
+<!--{#      <li class="nav-item dropdown ">#}-->
+<!--{#        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}-->
+<!--{#          Usuario: {{ request.user.username}}#}-->
+<!--{#        </a>#}-->
+<!--{#        <div class="dropdown-menu" aria-labelledby="navbarDropdown">#}-->
+<!--{#          <a class="dropdown-item" href="#" id="OpenImport" data-url="{% url 'baseu:import_modal' %}">Importar modelos</a>#}-->
+<!--{#            <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>#}-->
+<!--{#        </div>#}-->
+<!--{#      </li>#}-->
     </ul>
 
     <ul class="navbar-nav ms-auto">

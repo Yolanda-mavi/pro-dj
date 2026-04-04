@@ -65,7 +65,7 @@ class FractionMxCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de fracción arancelaria mexicana"
+        context['title'] = "Crear fracción arancelaria mexicana"
         context['list_url'] = reverse_lazy('baseu:fmx_list')
         context['action'] = 'add'
         return context
@@ -189,7 +189,7 @@ class FractionHtsusCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de fracción HTSUS"
+        context['title'] = "Crear fracción HTSUS"
         context['list_url'] = reverse_lazy('baseu:fhtsus_list')
         context['action'] = 'add'
         return context
@@ -313,7 +313,7 @@ class FractionUsCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de fracción de usa"
+        context['title'] = "Crear fracción de usa"
         context['list_url'] = reverse_lazy('baseu:fus_list')
         context['action'] = 'add'
         return context
@@ -437,7 +437,7 @@ class FractionUsExpCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de fracción de usa para exportación"
+        context['title'] = "Crear fracción de usa para exportación"
         context['list_url'] = reverse_lazy('baseu:fusexp_list')
         context['action'] = 'add'
         return context

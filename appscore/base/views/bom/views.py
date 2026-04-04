@@ -8,9 +8,6 @@ from django.views.generic import ListView, CreateView, UpdateView,DeleteView,For
 from appscore.base.forms import BomForm
 from appscore.base.models import Product, Bom,Bomline, models
 
-
-
-
 class BomCreateView(LoginRequiredMixin,CreateView):
     model = Bom
     form_class = BomForm
@@ -97,7 +94,7 @@ class BomCreateView(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Creacion de lista de materiales"
+        context['title'] = "Crear lista de materiales"
         context['list_url'] = reverse_lazy('baseu:dashboard')
         context['action'] = 'add'
         return context

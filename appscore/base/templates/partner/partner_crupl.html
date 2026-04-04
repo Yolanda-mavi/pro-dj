@@ -1,0 +1,162 @@
+{% extends  'form.html' %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>
+    <script src="{% static 'modeljs/partner_crupl.js' %}"></script>
+    <link href="{% static 'css/main_style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="." id="formGeneric">
+<div class="card" >
+     <div class="card-header d-flex justify-content-between align-items-center">
+         <h5 class="card-title mb-0"> {{ title }} </h5>
+         <a class="link-secondary" href="{{ list_url }}"> Lista </a>
+     </div>
+    <div class="card-body" >
+        {% csrf_token %}
+        <input type="hidden" name="action" id="action" value="{{ action }}">
+<!--        {% for field in form.visible_fields %}-->
+<!--            <div class="form-group">-->
+<!--            <label for="name"  class="col-form-label" >{{ field.label }}</label>-->
+<!--            {{ field }}-->
+<!--            </div>-->
+
+<!--        {% endfor %}-->
+<!--        {% for row in formf_head %}-->
+<!--            <div class="row">-->
+<!--            {% for item in row %}-->
+<!--                <div class="form-group col-md-{{ item.col }}">-->
+<!--                <label for="{{ item.field.id_for_label }}" > {{ item.field.label }} </label>-->
+<!--                {{ item.field }}-->
+<!--                </div>-->
+<!--            {% endfor%}-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+
+        {% for row in formf_head %}
+            <div class="row mb-2">
+            {% for item in row %}
+                {% if item.col == 6  or item.col == 12 %}
+                    <div class="form-group col-md-{{ item.col }}">
+                    <div class="d-flex  align-items-center ">
+                    <label for="{{ item.field.id_for_label }}" class="form-label-fixed col-form-label " > {{ item.field.label }} </label>
+                    <div class="flex-grow-1" > {{ item.field }} </div>
+                    </div>
+                    </div>
+                {% else %}
+                    <div class="form-group col-md-{{ item.col }}">
+                    <label for="{{ item.field.id_for_label }}" class="form-label-fixed" > {{ item.field.label }} </label>
+                    {{ item.field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endfor %}
+
+<!--          {% for row in formf_head %}-->
+<!--            <div class="row mb-2">-->
+<!--            {% for item in row %}-->
+<!--                <div class="col-md-{{ item.col }}">-->
+<!--                <div class="row align-items-center ">-->
+<!--                <div class="col-4 text-start">-->
+<!--                <label for="{{ item.field.id_for_label }}" class="col-form-label " > {{ item.field.label }} </label>-->
+<!--                </div>-->
+<!--                <div class="col-8"> {{ item.field }} </div>-->
+<!--                </div>-->
+<!--                </div>-->
+<!--            {% endfor%}-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+
+    <br>
+    <ul class="nav nav-tabs justify-content-end" id="Tab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="infopa-tab" data-bs-toggle="tab" data-bs-target="#infopa" type="button" role="tab" aria-controls="infopa" aria-selected="true">Información</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link " id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Costos</button>
+      </li>
+
+
+    </ul>
+
+ <div class="tab-content" id="infopaTabContent">
+    <div class="tab-pane fade show active mb-3" id="infopa" role="tabpanel" aria-labelledby="infopa-tab">
+        <br>
+        {% for row in formf_tabinfo %}
+            <div class="row mb-2">
+            {% for item in row %}
+                <div class="form-group col-md-{{ item.col }}">
+                    <div class="d-flex  align-items-center ">
+                    <label for="{{ item.field.id_for_label }}" class="form-label-fixed col-form-label " > {{ item.field.label }} </label>
+                    <div class="flex-grow-1" > {{ item.field }} </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="container form-control"  >
+        {% for row in formf_tabdir %}
+            <div class="row mb-2">
+            {% for item in row %}
+                <div class="form-group col-md-{{ item.col }}">
+                <label for="{{ item.field.id_for_label }}" class="form-label-fixed" > {{ item.field.label }} </label>
+                {{ item.field }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+
+    </div>
+ </div>
+
+
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show " id="home" role="tabpanel" aria-labelledby="home-tab">
+
+
+     <table class="table" id="datatableid" >
+      <thead>
+      {% block columns %}
+           <tr>
+          <th scope="col" style="width: 10%;" > #</th>
+          <th scope="col">Nombre</th>
+          <th>Cantidad</th>
+          <th scope="col"  style="width: 20%;"  >Acciones
+          <button type="button" class="btn btn-secondary btn-sm" id="btnAddLine">
+                Agregar línea
+          </button>
+          </th>
+          </tr>
+
+      {% endblock %}
+
+      </thead>
+      <tbody>
+      {% block rows %}
+
+      {% endblock %}
+
+      </tbody>
+    </table>
+
+ </div>
+</div>
+    </div>
+
+    <div class="card-footer">
+    <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
+    </div>
+</div>
+<div id="errorContainer"></div>
+</form>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
+
