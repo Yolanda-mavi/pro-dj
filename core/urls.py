@@ -34,6 +34,10 @@ urlpatterns = [
     #path('prueba/',myfirstview)
     #path('product/', product_list,name='product_list'),
     path('base/',include('appscore.base.urls')),
+    path('base/',include('appscore.mrp.urls')),
+    path('base/',include('appscore.inventory.urls')),
+    path('base/',include('appscore.rdata.urls')),
+    # path('base/',include('appscore.rdata.urls')),
     path('',IndexView.as_view(),name='index'),
     path('login/', include('appscore.login.urls')),
 ]

@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appscore.base',
     'appscore.homepage',
-    'appscore.login'
+    'appscore.login',
+    'appscore.rdata',
+    'appscore.inventory',
+    'appscore.mrp',
+
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
 {% extends  'home.html' %}
-
+{% load static %}
 {% block head %}
 
 {% block head_form %}
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
            const data = await response.json();
            if (data.success) {
-               {#//window.location.href = "{% url 'baseu:uom_list' %}";#}
+               {#//window.location.href = "{% url 'baseu:dashboard' %}";#}
                //window.location.pathname
                window.location.href = "{{ list_url }}";
            } else {

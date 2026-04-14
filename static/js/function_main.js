@@ -1,48 +1,4 @@
-// function message_error(obj){
-//     var html = "<ul style='text-align: left;'>"
-//
-//     Object.entries(obj).forEach(([key, value]) => {
-//         html +="<li>"+key+":"+ value+"</li> "
-//       //console.log(`${clave}: ${valor}`);
-//     });
-//     html +="</ul>"
-//      alert(html);
-// }
-// function message_error(errors) {
-//     let message = '';
-//
-//     if (typeof errors === 'object') {
-//         for (const [key, value] of Object.entries(errors)) {
-//             message += `${key}: ${value}\n`;
-//         }
-//     } else {
-//         message = errors;
-//     }
-//
-//     alert(message);
-// }
-
-// function message_error(errors) {
-//     const container = document.getElementById('errorContainer');
-//     container.innerHTML = ''; // limpiar errores previos
-//
-//     let html = '<div class="alert alert-danger">';
-//
-//     if (typeof errors === 'object') {
-//         html += '<ul>';
-//         for (const [key, value] of Object.entries(errors)) {
-//             html += `<li><strong>${key}:</strong> ${value}</li>`;
-//         }
-//         html += '</ul>';
-//     } else {
-//         html += `<p>${errors}</p>`;
-//     }
-//
-//     html += '</div>';
-//
-//     container.innerHTML = html;
-// }
-
+/* Funciones para errores genericos  *falta mejorar en caso de error de pyton nose muestra y cuando un getlines tiene el nombre incorrecto en python y js*/
 function show_toast(message, type = 'danger') {
     const container = document.getElementById('toastContainer');
 
@@ -64,7 +20,6 @@ function show_toast(message, type = 'danger') {
 
     toast.show();
 
-    // eliminar después de ocultarse
     toastElement.addEventListener('hidden.bs.toast', () => {
         toastElement.remove();
     });
@@ -81,41 +36,6 @@ function show_errors_toast(errors) {
 
     show_toast(messages.join('<br>'), 'danger');
 }
-// function show_errors_toast(errors) {
-//     if (typeof errors === 'object') {
-//         for (const [field, messages] of Object.entries(errors)) {
-//             messages.forEach(msg => {
-//                 show_toast(`${field}: ${msg}`, 'danger');
-//             });
-//         }
-//     } else {
-//         show_toast(errors, 'danger');
-//     }
-// }
-// function show_field_errors(errors) {
-//
-//     // limpiar errores previos
-//     document.querySelectorAll('.is-invalid').forEach(el => {
-//         el.classList.remove('is-invalid');
-//     });
-//
-//     document.querySelectorAll('.invalid-feedback').forEach(el => {
-//         el.innerHTML = '';
-//     });
-//
-//     // recorrer errores
-//     for (const [field, messages] of Object.entries(errors)) {
-//         const input = document.querySelector(`[name="${field}"]`);
-//
-//         if (input) {
-//             input.classList.add('is-invalid');
-//
-//             const feedback = input.closest('.form-group')
-//                                   .querySelector('.invalid-feedback');
-//
-//             if (feedback) {
-//                 feedback.innerHTML = messages.join('<br>');
-//             }
-//         }
-//     }
-// }
+
+
+

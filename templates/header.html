@@ -23,8 +23,8 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="#">Facturas</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
-            <a class="dropdown-item" href="{% url 'baseu:partner_list' %}">Clientes</a>
+            <a class="dropdown-item" href="{% url 'inventoryu:product_list' %}">Productos</a>
+            <a class="dropdown-item" href="{% url 'rdatau:partner_list' %}">Clientes</a>
             <a class="dropdown-item" href="#">Proveedores</a>
         </div>
       </li>
@@ -33,10 +33,10 @@
           Inventarios
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
-          <a class="dropdown-item" href="{% url 'baseu:category_list' %}">Categorias</a>
-          <a class="dropdown-item" href="{% url 'baseu:bom_list' %}">Lista de materiales</a>
-          <a class="dropdown-item" href="{% url 'baseu:uom_list' %}">Unidades de medida</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:product_list' %}">Productos</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:category_list' %}">Categorias</a>
+          <a class="dropdown-item" href="{% url 'mrpu:bom_list' %}">Lista de materiales</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:uom_list' %}">Unidades de medida</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -47,16 +47,16 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <h6 class="dropdown-header">Inventario</h6>
-          <a class="dropdown-item" href="{% url 'baseu:product_list' %}">Productos</a>
-          <a class="dropdown-item" href="{% url 'baseu:bom_list' %}">Lista de materiales</a>
-          <a class="dropdown-item" href="{% url 'baseu:category_list' %}">Categorías</a>
-          <a class="dropdown-item" href="{% url 'baseu:uom_list' %}">Unidades de medida</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:product_list' %}">Productos</a>
+          <a class="dropdown-item" href="{% url 'mrpu:bom_list' %}">Lista de materiales</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:category_list' %}">Categorías</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:uom_list' %}">Unidades de medida</a>
           <div class="dropdown-divider"></div>
           <h6 class="dropdown-header ">Fracciones</h6>
-          <a class="dropdown-item" href="{% url 'baseu:fhtsus_list' %}">Fracciones HTSUS</a>
-          <a class="dropdown-item" href="{% url 'baseu:fmx_list' %}">Fracciones arancelarias mexicana</a>
-          <a class="dropdown-item" href="{% url 'baseu:fus_list' %}">Fracciones de usa</a>
-          <a class="dropdown-item" href="{% url 'baseu:fusexp_list' %}">Fracciones de usa para exportación</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:fhtsus_list' %}">Fracciones HTSUS</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:fmx_list' %}">Fracciones arancelarias mexicana</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:fus_list' %}">Fracciones de usa</a>
+          <a class="dropdown-item" href="{% url 'inventoryu:fusexp_list' %}">Fracciones de usa para exportación</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{% url 'baseu:country_list' %}">Países</a>
           <a class="dropdown-item" href="{% url 'baseu:sector_list' %}">Sectores</a>

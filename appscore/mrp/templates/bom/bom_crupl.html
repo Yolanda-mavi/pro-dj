@@ -1,0 +1,74 @@
+{% extends  'form.html' %}
+{% load static %}
+{% block head_form %}
+<!--    <script src="{% static 'lib/DataTables/datatables.min.js'  %}"></script>-->
+    <script src="{% static 'mrpjs/bom_crupl.js' %}"></script>
+    <link href="{% static  'lib/tomselect/tom-select.css'  %}" rel='stylesheet' >
+    <script src="{% static 'lib/tomselect/tom-select.complete.min.js' %}" ></script>
+<!--    <link href="{% static 'css/main_style.css' %}" rel="stylesheet">-->
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="." id="formGeneric">
+<div class="card" >
+     <div class="card-header d-flex justify-content-between align-items-center">
+         <h5 class="card-title mb-0"> {{ title }} </h5>
+         <a class="link-secondary" href="{{ list_url }}"> Lista </a>
+     </div>
+    <div class="card-body" >
+        {% csrf_token %}
+        <input type="hidden" name="action" id="action" value="{{ action }}">
+        {% for field in form.visible_fields %}
+            <div class="form-group">
+            <label for="name"  class="col-form-label" >{{ field.label }}</label>
+            {{ field }}
+            </div>
+        {% endfor %}
+        <br>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Lineas</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+               <div id="table-container" style="max-height: 300px; overflow-y: auto;">
+               <table class="table table-sm table-bordered table-striped" id="datatableid">
+                <thead>
+                    <tr>
+                        <th style="width:5%">#</th>
+                        <th>Producto</th>
+                        <th style="width:20%">Cantidad</th>
+                        <th style="width:10%">
+                            <button type="button" class="btn btn-secondary btn-sm" id="btnAddLine">
+                                +
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                </table>
+<!--                <div id="pagination" class="mt-2"></div>-->
+                <div id="scroll-sentinel" style="height: 20px;"></div>
+                <div id="loading" class="text-center d-none">Cargando...</div>
+               </div>
+
+         </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+    <button type="submit" class="btn btn-success btn-sm " id="btnSave" >  <i class="fa-regular fa-trash-can"></i>  Guardar Registro </button>
+    <a class="link-secondary" href="{{ list_url }}">Cancelar</a>
+    </div>
+</div>
+<div id="errorContainer"></div>
+</form>
+
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
+
+
